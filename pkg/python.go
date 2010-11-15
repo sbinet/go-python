@@ -46,6 +46,16 @@ func Main(args []string) int {
 	return int(C.Py_Main(argc, &argv[0]))
 }
 
+/*
+int PyRun_SimpleString(const char *command)
+This is a simplified interface to PyRun_SimpleStringFlags() below, leaving the PyCompilerFlags* argument set to NULL.
+*/
+func Run_SimpleString(command string) int {
+	c_cmd := C.CString(command)
+	defer C.free(unsafe.Pointer(c_cmd))
+	return int(C.PyRun_SimpleString(c_cmd))
+}
+
 // PyObject layer
 type PyObject C.PyObject
 
