@@ -1,8 +1,11 @@
 package main
 
 import "fmt"
-import _ "python"
+import "python"
 
 func main() {
-	fmt.Println("hello")
+	gostr := "foo"
+	pystr := python.PyString_FromString(gostr)
+	str := python.PyString_AsString(pystr)
+	fmt.Println("hello [", str, "]")
 }

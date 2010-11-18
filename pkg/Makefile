@@ -10,9 +10,15 @@ PYTHON:=python2
 PYTHON_VERSION:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(''.join(distutils.sysconfig.get_config_vars('VERSION'))+'\n')"`
 PYTHON_CPPFLAGS:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_inc()+'\n')"`
 PYTHON_LDFLAGS:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write('-L'+distutils.sysconfig.get_python_lib(0,1)+' -lpython')"`$(PYTHON_VERSION)
-CGOFILES=python.go
 CGO_LDFLAGS=$(PYTHON_LDFLAGS)
 CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS)
+
+CGOFILES=\
+	veryhigh.go\
+	object.go\
+	string.go\
+	python.go
+
 
 #CLEANFILES+=python_test
 

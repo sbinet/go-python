@@ -5,6 +5,6 @@ import "os"
 import "python"
 
 func main() {
-	rc := python.Main(os.Args)
+	rc := python.Py_Main(os.Args)
 	os.Exit(rc)
 }
