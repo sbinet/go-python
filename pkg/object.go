@@ -263,7 +263,7 @@ Return value: New reference.
 Call the method named method of object o with a variable number of C arguments. The C arguments are described by a Py_BuildValue() format string that should produce a tuple. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression o.method(args). Note that if you only pass PyObject * args, PyObject_CallMethodObjArgs() is a faster alternative.
 */
 func
-(self *PyObject) CallMethod(format string, args ..interface{}) *PyObject {
+(self *PyObject) CallMethod(format string, args ...interface{}) *PyObject {
 	//FIXME
 	panic("not implemented")
 	return nil
