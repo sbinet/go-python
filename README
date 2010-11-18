@@ -1,0 +1,5 @@
+go-python
+=========
+
+Naive 'go' bindings towards the C-API of CPython
+
