@@ -16,6 +16,7 @@ CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS)
 CGOFILES=\
 	veryhigh.go\
 	object.go\
+	type.go\
 	string.go\
 	tuple.go\
 	list.go\

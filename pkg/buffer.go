@@ -90,19 +90,18 @@ func PyBuffer_SizeFromFormat(self *Py_buffer) int {
 	panic("not implemented")
 }
 
-//type cbuffer *C.void
-
 /*
 int PyObject_CopyToObject(PyObject *obj, void *buf, Py_ssize_t len, char fortran)
 Copy len bytes of data pointed to by the contiguous chunk of memory pointed to by buf into the buffer exported by obj. The buffer must of course be writable. Return 0 on success and return -1 and raise an error on failure. If the object does not have a writable buffer, then an error is raised. If fortran is 'F', then if the object is multi-dimensional, then the data will be copied into the array in Fortran-style (first dimension varies the fastest). If fortran is 'C', then the data will be copied into the array in C-style (last dimension varies the fastest). If fortran is 'A', then it does not matter and the copy will be made in whatever way is more efficient.
 */
 func PyObject_CopyToObject(self *PyObject, buf []byte, fortran string) os.Error {
 	/*
-	c_buf := unsafe.Pointer(buf[0])
+	c_buf := (*C.char)(unsafe.Pointer(&buf[0]))
 	c_for := C.char(fortran[0])
 
+	py_self := self.ptr
 	//defer C.free(unsafe.Pointer(c_for))
-	//err := PyObject_CopyToObject(topy(self), c_buf, C.Py_ssize_t(len(buf)), c_for)
+	err := C.PyObject_CopyToObject(py_self, c_buf, C.Py_ssize_t(len(buf)), c_for)
 	 */
 	//FIXME
 	panic("not implemented")
@@ -134,5 +133,6 @@ func PyBuffer_FillInfo(self *PyObject, buf []byte, readonly bool, infoflags int)
 	//FIXME
 	panic("not implemented")
 }
+
 // EOF
 
