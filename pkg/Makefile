@@ -17,6 +17,8 @@ CGOFILES=\
 	veryhigh.go\
 	object.go\
 	type.go\
+	none.go\
+	int.go\
 	string.go\
 	tuple.go\
 	list.go\
