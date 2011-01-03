@@ -20,6 +20,7 @@ CGOFILES=\
 	tuple.go\
 	list.go\
 	dict.go\
+	buffer.go\
 	python.go
 
 
