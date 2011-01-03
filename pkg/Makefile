@@ -16,12 +16,14 @@ CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)
 
 CGOFILES=\
 	veryhigh.go\
+	utilities.go\
 	object.go\
 	type.go\
 	none.go\
 	numeric.go\
 	sequence.go\
 	dict.go\
+	otherobjects.go\
 	python.go
 
 
