@@ -20,10 +20,8 @@ CGOFILES=\
 	type.go\
 	none.go\
 	numeric.go\
-	float.go\
 	sequence.go\
 	dict.go\
-	buffer.go\
 	python.go
 
 
