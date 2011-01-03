@@ -6,6 +6,8 @@ package python
 //int _gopy_PyFloat_Check(PyObject *o) { return PyFloat_Check(o); }
 //int _gopy_PyFloat_CheckExact(PyObject *o) { return PyFloat_CheckExact(o); }
 //double _gopy_PyFloat_AS_DOUBLE(PyObject *pyfloat) { return PyFloat_AS_DOUBLE(pyfloat); }
+//int _gopy_PyComplex_Check(PyObject *o) { return PyComplex_Check(o); }
+//int _gopy_PyComplex_CheckExact(PyObject *o) { return PyComplex_CheckExact(o); }
 import "C"
 //import "unsafe"
 
@@ -127,6 +129,75 @@ Deprecated since version 2.7: Use PyObject_Repr() or PyOS_double_to_string() ins
 func PyFloat_AsReprString(buf []byte, v *C.PyFloatObject) {
 	//FIXME ?
 	panic("not implemented")
+}
+
+
+/////////// complex ///////////
+
+/*
+int PyComplex_Check(PyObject *p)
+Return true if its argument is a PyComplexObject or a subtype of PyComplexObject.
+
+Changed in version 2.2: Allowed subtypes to be accepted.
+*/
+func PyComplex_Check(self *PyObject) bool {
+	return int2bool(C._gopy_PyComplex_Check(topy(self)))
+}
+
+/*
+int PyComplex_CheckExact(PyObject *p)
+Return true if its argument is a PyComplexObject, but not a subtype of PyComplexObject.
+
+New in version 2.2.
+*/
+func PyComplex_CheckExact(self *PyObject) bool {
+	return int2bool(C._gopy_PyComplex_CheckExact(topy(self)))
+}
+
+/*
+PyObject* PyComplex_FromCComplex(Py_complex v)
+Return value: New reference.
+Create a new Python complex number object from a C Py_complex value.
+*/
+func PyComplex_FromCComplex(v C.Py_complex) *PyObject {
+	//FIXME ? use go-complex ?
+	return togo(C.PyComplex_FromCComplex(v))
+}
+
+/*
+PyObject* PyComplex_FromDoubles(double real, double imag)
+Return value: New reference.
+Return a new PyComplexObject object from real and imag.
+*/
+func PyComplex_FromDoubles(real, imag float64) *PyObject {
+	return togo(C.PyComplex_FromDoubles(C.double(real), C.double(imag)))
+}
+
+/*
+double PyComplex_RealAsDouble(PyObject *op)
+Return the real part of op as a C double.
+*/
+func PyComplex_RealAsDouble(op *PyObject) float64 {
+	return float64(C.PyComplex_RealAsDouble(topy(op)))
+}
+
+/*
+double PyComplex_ImagAsDouble(PyObject *op)
+Return the imaginary part of op as a C double.
+*/
+func PyComplex_ImagAsDouble(op *PyObject) float64 {
+	return float64(C.PyComplex_ImagAsDouble(topy(op)))
+}
+
+/*
+Py_complex PyComplex_AsCComplex(PyObject *op)
+Return the Py_complex value of the complex number op.
+
+Changed in version 2.6: If op is not a Python complex number object but has a __complex__() method, this method will first be called to convert op to a Python complex number object.
+*/
+func PyComplex_AsCComplex(op *PyObject) C.Py_complex {
+	// FIXME ? use go-complex ?
+	return C.PyComplex_AsCComplex(topy(op))
 }
 
 // EOF
