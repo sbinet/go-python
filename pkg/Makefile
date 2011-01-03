@@ -23,9 +23,7 @@ CGOFILES=\
 	bool.go\
 	long.go\
 	float.go\
-	string.go\
-	tuple.go\
-	list.go\
+	sequence.go\
 	dict.go\
 	buffer.go\
 	python.go
