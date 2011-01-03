@@ -21,6 +21,7 @@ CGOFILES=\
 	int.go\
 	bool.go\
 	long.go\
+	float.go\
 	string.go\
 	tuple.go\
 	list.go\
