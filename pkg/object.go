@@ -46,6 +46,7 @@ func int2err(i C.int) os.Error {
 	if i == 0 {
 		return nil
 	}
+	//FIXME: also handle python exceptions ?
 	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%i)", int(i))}
 }
 
