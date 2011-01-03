@@ -9,6 +9,7 @@ package python
 //{return PyObject_DelAttrString(o,attr_name);}
 import "C"
 import "unsafe"
+import "os"
 
 // PyObject layer
 type PyObject struct {
@@ -24,6 +25,27 @@ func topy(self *PyObject) *C.PyObject {
 }
 func togo(obj *C.PyObject) *PyObject {
 	return &PyObject{ptr:obj}
+}
+
+func int2bool(i C.int) bool {
+	if i != 0 {
+		return true
+	}
+	return false
+}
+
+type gopy_err struct {
+	err string
+}
+func (self *gopy_err) String() string {
+	return self.err
+}
+
+func int2err(i C.int) os.Error {
+	if i == 0 {
+		return nil
+	}
+	return &gopy_err{"error in C-Python"}
 }
 
 // int PyObject_HasAttr(PyObject *o, PyObject *attr_name)
@@ -232,8 +254,8 @@ Call a callable Python object callable_object, with arguments given by the tuple
 
 New in version 2.2.
 */
-func (self *PyObject) Check_Callable() int {
-	return int(C.PyCallable_Check(self.ptr))
+func (self *PyObject) Check_Callable() bool {
+	return int2bool(C.PyCallable_Check(self.ptr))
 }
 
 /*
