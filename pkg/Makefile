@@ -18,6 +18,7 @@ CGOFILES=\
 	object.go\
 	string.go\
 	tuple.go\
+	list.go\
 	python.go
 
 

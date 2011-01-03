@@ -10,6 +10,7 @@ package python
 import "C"
 import "unsafe"
 import "os"
+import "fmt"
 
 // PyObject layer
 type PyObject struct {
@@ -45,7 +46,7 @@ func int2err(i C.int) os.Error {
 	if i == 0 {
 		return nil
 	}
-	return &gopy_err{"error in C-Python"}
+	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%i)", int(i))}
 }
 
 // int PyObject_HasAttr(PyObject *o, PyObject *attr_name)
