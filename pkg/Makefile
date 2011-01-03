@@ -19,9 +19,7 @@ CGOFILES=\
 	object.go\
 	type.go\
 	none.go\
-	int.go\
-	bool.go\
-	long.go\
+	numeric.go\
 	float.go\
 	sequence.go\
 	dict.go\
