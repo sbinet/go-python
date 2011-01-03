@@ -20,6 +20,7 @@ CGOFILES=\
 	none.go\
 	int.go\
 	bool.go\
+	long.go\
 	string.go\
 	tuple.go\
 	list.go\
