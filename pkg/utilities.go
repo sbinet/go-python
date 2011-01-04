@@ -5,6 +5,12 @@ package python
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef USE_STACKCHECK
+ int _gopy_PyOS_CheckStack() { return PyOS_CheckStack(); }
+#else
+ int _gopy_PyOS_CheckStack() { return 0; }
+#endif
+ 
  PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }
 
  #include "marshal.h"
@@ -39,20 +45,63 @@ func PyOS_AfterFork() {
 int PyOS_CheckStack()
 Return true when the interpreter runs out of stack space. This is a reliable check, but is only available when USE_STACKCHECK is defined (currently on Windows using the Microsoft Visual C++ compiler). USE_STACKCHECK will be defined automatically; you should never change the definition in your own code.
 */
-// func PyOS_CheckStack() bool {
-// 	return int2bool(C._gopy_PyOS_CheckStack())
-// }
+func PyOS_CheckStack() bool {
+ 	return int2bool(C._gopy_PyOS_CheckStack())
+}
 
 /*
 PyOS_sighandler_t PyOS_getsig(int i)
 Return the current signal handler for signal i. This is a thin wrapper around either sigaction() or signal(). Do not call those functions directly! PyOS_sighandler_t is a typedef alias for void (*)(int).
 */
+func PyOS_getsig(i int) C.PyOS_sighandler_t {
+	//FIXME use go-signal ?
+	return C.PyOS_getsig(C.int(i))
+}
 
 /*
 PyOS_sighandler_t PyOS_setsig(int i, PyOS_sighandler_t h)
 Set the signal handler for signal i to be h; return the old signal handler. This is a thin wrapper around either sigaction() or signal(). Do not call those functions directly! PyOS_sighandler_t is a typedef alias for void (*)(int).
 */
+func PyOS_setsig(i int, h C.PyOS_sighandler_t) C.PyOS_sighandler_t {
+	//FIXME use go-signal ?
+	return C.PyOS_setsig(C.int(i), h)
+}
 
+///// system functions /////
+
+/*
+PyObject *PySys_GetObject(char *name)
+Return value: Borrowed reference.
+Return the object name from the sys module or NULL if it does not exist, without setting an exception.
+*/
+func PySys_GetObject(name string) *PyObject {
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	return togo(C.PySys_GetObject(c_name))
+}
+
+/*
+FILE *PySys_GetFile(char *name, FILE *def)
+Return the FILE* associated with the object name in the sys module, or def if name is not in the module or is not associated with a FILE*.
+int PySys_SetObject(char *name, PyObject *v)
+Set name in the sys module to v unless v is NULL, in which case name is deleted from the sys module. Returns 0 on success, -1 on error.
+void PySys_ResetWarnOptions()
+Reset sys.warnoptions to an empty list.
+void PySys_AddWarnOption(char *s)
+Append s to sys.warnoptions.
+void PySys_SetPath(char *path)
+Set sys.path to a list object of paths found in path which should be a list of paths separated with the platform’s search path delimiter (: on Unix, ; on Windows).
+void PySys_WriteStdout(const char *format, ...)
+Write the output string described by format to sys.stdout. No exceptions are raised, even if truncation occurs (see below).
+
+format should limit the total size of the formatted output string to 1000 bytes or less – after 1000 bytes, the output string is truncated. In particular, this means that no unrestricted “%s” formats should occur; these should be limited using “%.<N>s” where <N> is a decimal number calculated so that <N> plus the maximum size of other formatted text does not exceed 1000 bytes. Also watch out for “%f”, which can print hundreds of digits for very large numbers.
+
+If a problem occurs, or sys.stdout is unset, the formatted message is written to the real (C level) stdout.
+
+void PySys_WriteStderr(const char *format, ...)
+As above, but write to sys.stderr or stderr instead.
+*/
 
 /////// Process Control /////////
 
