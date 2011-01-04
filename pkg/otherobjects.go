@@ -27,13 +27,14 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
  int _gopy_PyCapsule_CheckExact(PyObject *p) { return PyCapsule_CheckExact(p); }
 
+#include "frameobject.h"
  int _gopy_PyGen_Check(PyObject *ob) { return _gopy_PyGen_Check(ob); }
  int _gopy_PyGen_CheckExact(PyObject *ob) { return _gopy_PyGen_CheckExact(ob); }
 
-#include "frameobject.h"
- //typedef PyFrameObject _gopy_PyFrameObject;
- //struct _frame;
- //struct PyFrameObject;
+
+ int _gopy_PySeqIter_Check(PyObject *op) { return PySeqIter_Check(op); }
+ int _gopy_PyCallIter_Check(PyObject *op) { return PyCallIter_Check(op); }
+
 */
 import "C"
 import "unsafe"
@@ -654,6 +655,55 @@ Create and return a new generator object based on the frame object. A reference 
 */
 func PyGen_New(frame *PyFrameObject) *PyObject {
 	return togo(C.PyGen_New((*C.struct__frame)(frame.ptr)))
+}
+
+///// iterator /////
+
+/*
+int PySeqIter_Check(op)
+Return true if the type of op is PySeqIter_Type.
+
+New in version 2.2.
+*/
+func PySeqIter_Check(op *PyObject) bool {
+	return int2bool(C._gopy_PySeqIter_Check(topy(op)))
+}
+
+/*
+PyObject* PySeqIter_New(PyObject *seq)
+Return value: New reference.
+Return an iterator that works with a general sequence object, seq. The iteration ends when the sequence raises IndexError for the subscripting operation.
+
+New in version 2.2.
+
+PyTypeObject PyCallIter_Type
+Type object for iterator objects returned by PyCallIter_New() and the two-argument form of the iter() built-in function.
+
+New in version 2.2.
+*/
+func PySeqIter_New(seq *PyObject) *PyObject {
+	return togo(C.PySeqIter_New(topy(seq)))
+}
+
+/*
+int PyCallIter_Check(op)
+Return true if the type of op is PyCallIter_Type.
+
+New in version 2.2.
+*/
+func PyCallIter_Check(op *PyObject) bool {
+	return int2bool(C._gopy_PyCallIter_Check(topy(op)))
+}
+
+/*
+PyObject* PyCallIter_New(PyObject *callable, PyObject *sentinel)
+Return value: New reference.
+Return a new iterator. The first parameter, callable, can be any Python callable object that can be called with no parameters; each call to it should return the next item in the iteration. When callable returns a value equal to sentinel, the iteration will be terminated.
+
+New in version 2.2.
+*/
+func PyCallIter_New(callable, sentinel *PyObject) *PyObject {
+	return togo(C.PyCallIter_New(topy(callable), topy(sentinel)))
 }
 
 // EOF
