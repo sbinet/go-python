@@ -27,6 +27,13 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
  int _gopy_PyCapsule_CheckExact(PyObject *p) { return PyCapsule_CheckExact(p); }
 
+ int _gopy_PyGen_Check(PyObject *ob) { return _gopy_PyGen_Check(ob); }
+ int _gopy_PyGen_CheckExact(PyObject *ob) { return _gopy_PyGen_CheckExact(ob); }
+
+#include "frameobject.h"
+ //typedef PyFrameObject _gopy_PyFrameObject;
+ //struct _frame;
+ //struct PyFrameObject;
 */
 import "C"
 import "unsafe"
@@ -618,5 +625,35 @@ func PyCapsule_SetPointer(capsule *PyObject, pointer *C.char) os.Error {
 	return int2err(C.PyCapsule_SetPointer(topy(capsule), unsafe.Pointer(pointer)))
 }
 
+///// generator /////
+
+type PyFrameObject struct {
+	ptr *C.PyFrameObject
+}
+
+/*
+int PyGen_Check(PyObject *ob)
+Return true if ob is a generator object; ob must not be NULL.
+*/
+func PyGen_Check(ob *PyObject) bool {
+	return int2bool(C._gopy_PyGen_Check(topy(ob)))
+}
+
+/*
+int PyGen_CheckExact(ob)
+Return true if ob‘s type is PyGen_Type is a generator object; ob must not be NULL.
+*/
+func PyGen_CheckExact(ob *PyObject) bool {
+	return int2bool(C._gopy_PyGen_CheckExact(topy(ob)))
+}
+
+/*
+PyObject* PyGen_New(PyFrameObject *frame)
+Return value: New reference.
+Create and return a new generator object based on the frame object. A reference to frame is stolen by this function. The parameter must not be NULL.
+*/
+func PyGen_New(frame *PyFrameObject) *PyObject {
+	return togo(C.PyGen_New((*C.struct__frame)(frame.ptr)))
+}
 
 // EOF
