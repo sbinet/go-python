@@ -25,6 +25,8 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
  int _gopy_PySlice_Check(PyObject *ob) { return PySlice_Check(ob); }
 
+ int _gopy_PyCapsule_CheckExact(PyObject *p) { return PyCapsule_CheckExact(p); }
+
 */
 import "C"
 import "unsafe"
@@ -446,6 +448,174 @@ func PySlice_GetIndicesEx(slice *PySliceObject, length int) (start, stop, step, 
 	slicelength  = int(c_slice)
 
 	return
+}
+
+///// capsule /////
+type PyCapsule_Destructor func (*PyObject)
+
+/*
+int PyCapsule_CheckExact(PyObject *p)
+Return true if its argument is a PyCapsule.
+*/
+func PyCapsule_CheckExact(p *PyObject) bool {
+	return int2bool(C._gopy_PyCapsule_CheckExact(topy(p)))
+}
+
+/*
+PyObject* PyCapsule_New(void *pointer, const char *name, PyCapsule_Destructor destructor)
+Return value: New reference.
+Create a PyCapsule encapsulating the pointer. The pointer argument may not be NULL.
+
+On failure, set an exception and return NULL.
+
+The name string may either be NULL or a pointer to a valid C string. If non-NULL, this string must outlive the capsule. (Though it is permitted to free it inside the destructor.)
+
+If the destructor argument is not NULL, it will be called with the capsule as its argument when it is destroyed.
+
+If this capsule will be stored as an attribute of a module, the name should be specified as modulename.attributename. This will enable other modules to import the capsule using PyCapsule_Import().
+*/
+func PyCapsule_New(pointer *C.char, name string, dtor C.PyCapsule_Destructor) *PyObject {
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	//FIXME use a go PyCapsule_Destructor ?
+	//FIXME use an interface{} instead of *C.char ?
+	return togo(C.PyCapsule_New(unsafe.Pointer(pointer), c_name, dtor))
+}
+
+/*
+void* PyCapsule_GetPointer(PyObject *capsule, const char *name)
+Retrieve the pointer stored in the capsule. On failure, set an exception and return NULL.
+
+The name parameter must compare exactly to the name stored in the capsule. If the name stored in the capsule is NULL, the name passed in must also be NULL. Python uses the C function strcmp() to compare capsule names.
+*/
+func PyCapsule_GetPointer(capsule *PyObject, name string) *C.char {
+
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	//FIXME use an interface{} instead of *C.char ?
+	ptr := C.PyCapsule_GetPointer(topy(capsule), c_name)
+	return (*C.char)(ptr)
+}
+
+/*
+PyCapsule_Destructor PyCapsule_GetDestructor(PyObject *capsule)
+Return the current destructor stored in the capsule. On failure, set an exception and return NULL.
+
+It is legal for a capsule to have a NULL destructor. This makes a NULL return code somewhat ambiguous; use PyCapsule_IsValid() or PyErr_Occurred() to disambiguate.
+*/
+func PyCapsule_GetDestructor(capsule *PyObject) C.PyCapsule_Destructor {
+	return C.PyCapsule_GetDestructor(topy(capsule))
+}
+
+/*
+void* PyCapsule_GetContext(PyObject *capsule)
+Return the current context stored in the capsule. On failure, set an exception and return NULL.
+
+It is legal for a capsule to have a NULL context. This makes a NULL return code somewhat ambiguous; use PyCapsule_IsValid() or PyErr_Occurred() to disambiguate.
+*/
+func PyCapsule_GetContext(capsule *PyObject) *C.char {
+
+	//FIXME use an interface{} instead of *C.char ?
+	ptr := C.PyCapsule_GetContext(topy(capsule))
+	return (*C.char)(ptr)
+}
+
+/*
+const char* PyCapsule_GetName(PyObject *capsule)
+Return the current name stored in the capsule. On failure, set an exception and return NULL.
+
+It is legal for a capsule to have a NULL name. This makes a NULL return code somewhat ambiguous; use PyCapsule_IsValid() or PyErr_Occurred() to disambiguate.
+*/
+func PyCapsule_GetName(capsule *PyObject) string {
+
+	c_name := C.PyCapsule_GetName(topy(capsule))
+	return C.GoString(c_name)
+}
+
+/*
+void* PyCapsule_Import(const char *name, int no_block)
+Import a pointer to a C object from a capsule attribute in a module. The name parameter should specify the full name to the attribute, as in module.attribute. The name stored in the capsule must match this string exactly. If no_block is true, import the module without blocking (using PyImport_ImportModuleNoBlock()). If no_block is false, import the module conventionally (using PyImport_ImportModule()).
+
+Return the capsule’s internal pointer on success. On failure, set an exception and return NULL. However, if PyCapsule_Import() failed to import the module, and no_block was true, no exception is set.
+*/
+func PyCapsule_Import(name string, no_block bool) *C.char {
+	
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	c_no_block := C.int(0)
+	if no_block {
+		c_no_block = C.int(1)
+	}
+
+	//FIXME use an interface{} instead of *C.char ?
+	ptr := C.PyCapsule_Import(c_name, c_no_block)
+	return (*C.char)(ptr)
+}
+
+/*
+int PyCapsule_IsValid(PyObject *capsule, const char *name)
+Determines whether or not capsule is a valid capsule. A valid capsule is non-NULL, passes PyCapsule_CheckExact(), has a non-NULL pointer stored in it, and its internal name matches the name parameter. (See PyCapsule_GetPointer() for information on how capsule names are compared.)
+
+In other words, if PyCapsule_IsValid() returns a true value, calls to any of the accessors (any function starting with PyCapsule_Get()) are guaranteed to succeed.
+
+Return a nonzero value if the object is valid and matches the name passed in. Return 0 otherwise. This function will not fail.
+*/
+func PyCapsule_IsValid(capsule *PyObject, name string) bool {
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	return int2bool(C.PyCapsule_IsValid(topy(capsule), c_name))
+}
+
+/*
+int PyCapsule_SetContext(PyObject *capsule, void *context)
+Set the context pointer inside capsule to context.
+
+Return 0 on success. Return nonzero and set an exception on failure.
+*/
+func PyCapsule_SetContext(capsule *PyObject, context *C.char) os.Error {
+	//FIXME use interface{} instead of *C.char ?
+	return int2err(C.PyCapsule_SetContext(topy(capsule), unsafe.Pointer(context)))
+}
+
+/*
+int PyCapsule_SetDestructor(PyObject *capsule, PyCapsule_Destructor destructor)
+Set the destructor inside capsule to destructor.
+
+Return 0 on success. Return nonzero and set an exception on failure.
+*/
+func PyCapsule_SetDestructor(capsule *PyObject, dtor C.PyCapsule_Destructor) os.Error {
+	//FIXME use go-PyCapsule_Destructor instead of cgo one ?
+	return int2err(C.PyCapsule_SetDestructor(topy(capsule), dtor))
+}
+
+
+/*
+int PyCapsule_SetName(PyObject *capsule, const char *name)
+Set the name inside capsule to name. If non-NULL, the name must outlive the capsule. If the previous name stored in the capsule was not NULL, no attempt is made to free it.
+
+Return 0 on success. Return nonzero and set an exception on failure.
+*/
+func PyCapsule_SetName(capsule *PyObject, name string) os.Error {
+	c_name := C.CString(name)
+	defer C.free(unsafe.Pointer(c_name))
+
+	return int2err(C.PyCapsule_SetName(topy(capsule), c_name))
+}
+
+
+/*
+int PyCapsule_SetPointer(PyObject *capsule, void *pointer)
+Set the void pointer inside capsule to pointer. The pointer may not be NULL.
+
+Return 0 on success. Return nonzero and set an exception on failure.
+*/
+func PyCapsule_SetPointer(capsule *PyObject, pointer *C.char) os.Error {
+	//FIXME use interface{} instead of *C.char ?
+	return int2err(C.PyCapsule_SetPointer(topy(capsule), unsafe.Pointer(pointer)))
 }
 
 
