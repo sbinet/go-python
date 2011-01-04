@@ -7,6 +7,8 @@ package python
 
  PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }
 
+ #include "marshal.h"
+
 */
 import "C"
 import "unsafe"
@@ -296,5 +298,102 @@ struct _inittab {
 int PyImport_ExtendInittab(struct _inittab *newtab)
 Add a collection of modules to the table of built-in modules. The newtab array must end with a sentinel entry which contains NULL for the name field; failure to provide the sentinel value can result in a memory fault. Returns 0 on success or -1 if insufficient memory could be allocated to extend the internal table. In the event of failure, no modules are added to the internal table. This should be called before Py_Initialize().
 */
+
+///// marshal /////
+const Py_MARSHAL_VERSION = 2 // FIXME: get it from the #define !
+
+/*
+void PyMarshal_WriteLongToFile(long value, FILE *file, int version)
+Marshal a long integer, value, to file. This will only write the least-significant 32 bits of value; regardless of the size of the native long type.
+
+Changed in version 2.4: version indicates the file format.
+*/
+func PyMarshal_WriteLongToFile(value int64, file *C.FILE, version int) {
+	//FIXME: use os.File instead ?
+	C.PyMarshal_WriteLongToFile(C.long(value), file, C.int(version))
+}
+
+/*
+void PyMarshal_WriteObjectToFile(PyObject *value, FILE *file, int version)
+Marshal a Python object, value, to file.
+
+Changed in version 2.4: version indicates the file format.
+*/
+func PyMarshal_WriteObjectToFile(value *PyObject, file *C.FILE, version int) {
+	//FIXME: use os.File instead ?
+	C.PyMarshal_WriteObjectToFile(topy(value), file, C.int(version))
+}
+
+/*
+PyObject* PyMarshal_WriteObjectToString(PyObject *value, int version)
+Return value: New reference.
+Return a string object containing the marshalled representation of value.
+
+Changed in version 2.4: version indicates the file format.
+*/
+func PyMarshal_WriteObjectToString(value *PyObject, version int) *PyObject {
+	return togo(C.PyMarshal_WriteObjectToString(topy(value), C.int(version)))
+}
+
+/*
+The following functions allow marshalled values to be read back in.
+
+XXX What about error detection? It appears that reading past the end of the file will always result in a negative numeric value (where that’s relevant), but it’s not clear that negative values won’t be handled properly when there’s no error. What’s the right way to tell? Should only non-negative values be written using these routines?
+*/
+
+/*
+long PyMarshal_ReadLongFromFile(FILE *file)
+Return a C long from the data stream in a FILE* opened for reading. Only a 32-bit value can be read in using this function, regardless of the native size of long.
+*/
+func PyMarshal_ReadLongFromFile(file *C.FILE) int64 {
+	//FIXME: use os.File instead ?
+	return int64(C.PyMarshal_ReadLongFromFile(file))
+}
+
+/*
+int PyMarshal_ReadShortFromFile(FILE *file)
+Return a C short from the data stream in a FILE* opened for reading. Only a 16-bit value can be read in using this function, regardless of the native size of short.
+*/
+func PyMarshal_ReadShortFromFile(file *C.FILE) int {
+	//FIXME: use os.File instead ?
+	return int(C.PyMarshal_ReadShortFromFile(file))
+}
+
+
+/*
+PyObject* PyMarshal_ReadObjectFromFile(FILE *file)
+Return value: New reference.
+Return a Python object from the data stream in a FILE* opened for reading. On error, sets the appropriate exception (EOFError or TypeError) and returns NULL.
+*/
+func PyMarshal_ReadObjectFromFile(file *C.FILE) *PyObject {
+	//FIXME: use os.File instead ?
+	return togo(C.PyMarshal_ReadObjectFromFile(file))
+}
+
+/*
+PyObject* PyMarshal_ReadLastObjectFromFile(FILE *file)
+Return value: New reference.
+Return a Python object from the data stream in a FILE* opened for reading. Unlike PyMarshal_ReadObjectFromFile(), this function assumes that no further objects will be read from the file, allowing it to aggressively load file data into memory so that the de-serialization can operate from data in memory rather than reading a byte at a time from the file. Only use these variant if you are certain that you won’t be reading anything else from the file. On error, sets the appropriate exception (EOFError or TypeError) and returns NULL.
+*/
+func PyMarshal_ReadLastObjectFromFile(file *C.FILE) *PyObject {
+	//FIXME: use os.File instead ?
+	return togo(C.PyMarshal_ReadLastObjectFromFile(file))
+}
+
+/*
+PyObject* PyMarshal_ReadObjectFromString(char *string, Py_ssize_t len)
+Return value: New reference.
+Return a Python object from the data stream in a character buffer containing len bytes pointed to by string. On error, sets the appropriate exception (EOFError or TypeError) and returns NULL.
+
+Changed in version 2.5: This function used an int type for len. This might require changes in your code for properly supporting 64-bit systems.
+*/
+func PyMarshal_ReadObjectFromString(str string) *PyObject {
+	//FIXME: use []byte ?
+	c_str := C.CString(str)
+	defer C.free(unsafe.Pointer(c_str))
+
+	return togo(C.PyMarshal_ReadObjectFromString(c_str, C.Py_ssize_t(len(str))))
+}
+
 
 // EOF
