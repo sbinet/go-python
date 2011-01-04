@@ -17,15 +17,22 @@ int _gopy_PyTuple_CheckExact(PyObject *o) { return PyTuple_CheckExact(o); }
 Py_ssize_t _gopy_PyTuple_GET_SIZE(PyObject *p) { return PyTuple_GET_SIZE(p); }
 void _gopy_PyTuple_SET_ITEM(PyObject *p, Py_ssize_t pos, PyObject *o) { PyTuple_SET_ITEM(p, pos, o); }
 PyObject* _gopy_PyTuple_GET_ITEM(PyObject *p, Py_ssize_t pos) { return PyTuple_GET_ITEM(p, pos); }
+
 int _gopy_PyList_Check(PyObject *o) { return PyList_Check(o); }
 int _gopy_PyList_CheckExact(PyObject *o) { return PyList_CheckExact(o); }
 Py_ssize_t _gopy_PyList_GET_SIZE(PyObject *o) { return PyList_GET_SIZE(o); }
 PyObject* _gopy_PyList_GET_ITEM(PyObject *list, Py_ssize_t i) { return PyList_GET_ITEM(list, i); }
 void _gopy_PyList_SET_ITEM(PyObject *list, Py_ssize_t i, PyObject *o) { PyList_SET_ITEM(list, i, o); }
+
 int _gopy_PyString_Check(PyObject *o) { return PyString_Check(o); }
 Py_ssize_t _gopy_PyString_GET_SIZE(PyObject *o) { return PyString_GET_SIZE(o);}
 char* _gopy_PyString_AS_STRING(PyObject *o) { return PyString_AS_STRING(o); }
+
 int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj); }
+
+ int _gopy_PyMemoryView_Check(PyObject *obj) { return PyMemoryView_Check(obj); }
+ Py_buffer *_gopy_PyMemoryView_GET_BUFFER(PyObject *obj) { return PyMemoryView_GET_BUFFER(obj); }
+
 */
 import "C"
 import "unsafe"
@@ -843,5 +850,50 @@ func PyBuffer_FillInfo(self *PyObject, buf []byte, readonly bool, infoflags int)
 	panic("not implemented")
 }
 
+///// memoryview /////
+
+/*
+A memoryview object exposes the new C level buffer interface as a Python object which can then be passed around like any other object.
+
+PyObject *PyMemoryView_FromObject(PyObject *obj)
+Create a memoryview object from an object that defines the new buffer interface.
+*/
+func PyMemoryView_FromObject(obj *PyObject) *PyObject {
+	return togo(C.PyMemoryView_FromObject(topy(obj)))
+}
+
+/*
+PyObject *PyMemoryView_FromBuffer(Py_buffer *view)
+Create a memoryview object wrapping the given buffer-info structure view. The memoryview object then owns the buffer, which means you shouldn’t try to release it yourself: it will be released on deallocation of the memoryview object.
+*/
+func PyMemoryView_FromBuffer(view *Py_buffer) *PyObject {
+	return togo(C.PyMemoryView_FromBuffer(view.ptr))
+}
+
+/*
+PyObject *PyMemoryView_GetContiguous(PyObject *obj, int buffertype, char order)
+Create a memoryview object to a contiguous chunk of memory (in either ‘C’ or ‘F’ortran order) from an object that defines the buffer interface. If memory is contiguous, the memoryview object points to the original memory. Otherwise copy is made and the memoryview points to a new bytes object.
+*/
+func PyMemoryView_GetContiguous(obj *PyObject, buffertype int, order string) *PyObject {
+	c_order := C.char(order[0])
+	return togo(C.PyMemoryView_GetContiguous(topy(obj), C.int(buffertype), c_order))
+}
+
+/*
+int PyMemoryView_Check(PyObject *obj)
+Return true if the object obj is a memoryview object. It is not currently allowed to create subclasses of memoryview.
+*/
+func PyMemoryView_Check(obj *PyObject) bool {
+	return int2bool(C._gopy_PyMemoryView_Check(topy(obj)))
+}
+
+/*
+Py_buffer *PyMemoryView_GET_BUFFER(PyObject *obj)
+Return a pointer to the buffer-info structure wrapped by the given object. The object must be a memoryview instance; this macro doesn’t check its type, you must do it yourself or you will risk crashes.
+*/
+func PyMemoryView_GET_BUFFER(obj *PyObject) *Py_buffer {
+	buf := C._gopy_PyMemoryView_GET_BUFFER(topy(obj))
+	return &Py_buffer{ptr:buf}
+}
 
 // EOF
