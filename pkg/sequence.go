@@ -1,26 +1,125 @@
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
-//int _gopy_PyTuple_Check(PyObject *o) { return PyTuple_Check(o); }
-//int _gopy_PyTuple_CheckExact(PyObject *o) { return PyTuple_CheckExact(o); }
-//Py_ssize_t _gopy_PyTuple_GET_SIZE(PyObject *p) { return PyTuple_GET_SIZE(p); }
-//void _gopy_PyTuple_SET_ITEM(PyObject *p, Py_ssize_t pos, PyObject *o) { PyTuple_SET_ITEM(p, pos, o); }
-//PyObject* _gopy_PyTuple_GET_ITEM(PyObject *p, Py_ssize_t pos) { return PyTuple_GET_ITEM(p, pos); }
-//int _gopy_PyList_Check(PyObject *o) { return PyList_Check(o); }
-//int _gopy_PyList_CheckExact(PyObject *o) { return PyList_CheckExact(o); }
-//Py_ssize_t _gopy_PyList_GET_SIZE(PyObject *o) { return PyList_GET_SIZE(o); }
-//PyObject* _gopy_PyList_GET_ITEM(PyObject *list, Py_ssize_t i) { return PyList_GET_ITEM(list, i); }
-//void _gopy_PyList_SET_ITEM(PyObject *list, Py_ssize_t i, PyObject *o) { PyList_SET_ITEM(list, i, o); }
-//int _gopy_PyString_Check(PyObject *o) { return PyString_Check(o); }
-//Py_ssize_t _gopy_PyString_GET_SIZE(PyObject *o) { return PyString_GET_SIZE(o);}
-//char* _gopy_PyString_AS_STRING(PyObject *o) { return PyString_AS_STRING(o); }
-//int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj); }
+/*
+#include "Python.h"
+#include <stdlib.h>
+#include <string.h>
+
+int _gopy_PyByteArray_Check(PyObject *o) { return PyByteArray_Check(o); }
+int _gopy_PyByteArray_CheckExact(PyObject *o) { return PyByteArray_CheckExact(o); }
+
+char* _gopy_PyByteArray_AS_STRING(PyObject *bytearray) { return PyByteArray_AS_STRING(bytearray); }
+
+ Py_ssize_t _gopy_PyByteArray_GET_SIZE(PyObject *bytearray) { return PyByteArray_GET_SIZE(bytearray); }
+
+int _gopy_PyTuple_Check(PyObject *o) { return PyTuple_Check(o); }
+int _gopy_PyTuple_CheckExact(PyObject *o) { return PyTuple_CheckExact(o); }
+Py_ssize_t _gopy_PyTuple_GET_SIZE(PyObject *p) { return PyTuple_GET_SIZE(p); }
+void _gopy_PyTuple_SET_ITEM(PyObject *p, Py_ssize_t pos, PyObject *o) { PyTuple_SET_ITEM(p, pos, o); }
+PyObject* _gopy_PyTuple_GET_ITEM(PyObject *p, Py_ssize_t pos) { return PyTuple_GET_ITEM(p, pos); }
+int _gopy_PyList_Check(PyObject *o) { return PyList_Check(o); }
+int _gopy_PyList_CheckExact(PyObject *o) { return PyList_CheckExact(o); }
+Py_ssize_t _gopy_PyList_GET_SIZE(PyObject *o) { return PyList_GET_SIZE(o); }
+PyObject* _gopy_PyList_GET_ITEM(PyObject *list, Py_ssize_t i) { return PyList_GET_ITEM(list, i); }
+void _gopy_PyList_SET_ITEM(PyObject *list, Py_ssize_t i, PyObject *o) { PyList_SET_ITEM(list, i, o); }
+int _gopy_PyString_Check(PyObject *o) { return PyString_Check(o); }
+Py_ssize_t _gopy_PyString_GET_SIZE(PyObject *o) { return PyString_GET_SIZE(o);}
+char* _gopy_PyString_AS_STRING(PyObject *o) { return PyString_AS_STRING(o); }
+int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj); }
+*/
 import "C"
 import "unsafe"
 import "os"
 
+//////// bytearray ////////
+
+/*
+int PyByteArray_Check(PyObject *o)
+Return true if the object o is a bytearray object or an instance of a subtype of the bytearray type.
+*/
+func PyByteArray_Check(self *PyObject) bool {
+	return int2bool(C._gopy_PyByteArray_Check(topy(self)))
+}
+
+/*
+int PyByteArray_CheckExact(PyObject *o)
+Return true if the object o is a bytearray object, but not an instance of a subtype of the bytearray type.
+*/
+func PyByteArray_CheckExact(self *PyObject) bool {
+	return int2bool(C._gopy_PyByteArray_CheckExact(topy(self)))
+}
+
+/*
+PyObject* PyByteArray_FromObject(PyObject *o)
+Return a new bytearray object from any object, o, that implements the buffer protocol.
+*/
+func PyByteArray_FromObject(self *PyObject) *PyObject {
+	return togo(C.PyByteArray_FromObject(topy(self)))
+}
+
+/*
+PyObject* PyByteArray_FromStringAndSize(const char *string, Py_ssize_t len)
+Create a new bytearray object from string and its length, len. On failure, NULL is returned.
+*/
+func PyByteArray_FromStringAndSize(str string) *PyObject {
+	//FIXME use []byte instead ?
+	c_str := C.CString(str)
+	defer C.free(unsafe.Pointer(c_str))
+
+	return togo(C.PyByteArray_FromStringAndSize(c_str, C.Py_ssize_t(len(str))))
+}
+
+/*
+PyObject* PyByteArray_Concat(PyObject *a, PyObject *b)
+Concat bytearrays a and b and return a new bytearray with the result.
+*/
+func PyByteArray_Concat(a, b *PyObject) *PyObject {
+	return togo(C.PyByteArray_Concat(topy(a), topy(b)))
+}
+
+/*
+Py_ssize_t PyByteArray_Size(PyObject *bytearray)
+Return the size of bytearray after checking for a NULL pointer.
+*/
+func PyByteArray_Size(self *PyObject) int {
+	return int(C.PyByteArray_Size(topy(self)))
+}
+
+/*
+char* PyByteArray_AsString(PyObject *bytearray)
+Return the contents of bytearray as a char array after checking for a NULL pointer.
+*/
+func PyByteArray_AsString(self *PyObject) string {
+	c_str := C.PyByteArray_AsString(topy(self))
+	return C.GoString(c_str)
+}
+
+/*
+int PyByteArray_Resize(PyObject *bytearray, Py_ssize_t len)
+Resize the internal buffer of bytearray to len.
+*/
+func PyByteArray_Resize(self *PyObject, sz int) os.Error {
+	return int2err(C.PyByteArray_Resize(topy(self), C.Py_ssize_t(sz)))
+}
+
+/*
+char* PyByteArray_AS_STRING(PyObject *bytearray)
+Macro version of PyByteArray_AsString().
+*/
+func PyByteArray_AS_STRING(self *PyObject) string {
+	c_str := C._gopy_PyByteArray_AS_STRING(topy(self))
+	return C.GoString(c_str)
+}
+
+/*
+Py_ssize_t PyByteArray_GET_SIZE(PyObject *bytearray)
+Macro version of PyByteArray_Size().
+*/
+func PyByteArray_GET_SIZE(self *PyObject) int {
+	return int(C._gopy_PyByteArray_GET_SIZE(topy(self)))
+}
+
+//////// tuple /////////
 /*
 int PyTuple_Check(PyObject *p)
 Return true if p is a tuple object or an instance of a subtype of the tuple type.
