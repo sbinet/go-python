@@ -8,6 +8,7 @@ package python
  PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }
 
  #include "marshal.h"
+ #include "frameobject.h"
 
 */
 import "C"
@@ -395,5 +396,77 @@ func PyMarshal_ReadObjectFromString(str string) *PyObject {
 	return togo(C.PyMarshal_ReadObjectFromString(c_str, C.Py_ssize_t(len(str))))
 }
 
+///// eval/reflection /////
+
+/*
+PyObject* PyEval_GetBuiltins()
+Return value: Borrowed reference.
+Return a dictionary of the builtins in the current execution frame, or the interpreter of the thread state if no frame is currently executing.
+*/
+func PyEval_GetBuiltins() *PyObject {
+	return togo(C.PyEval_GetBuiltins())
+}
+
+/*
+PyObject* PyEval_GetLocals()
+Return value: Borrowed reference.
+Return a dictionary of the local variables in the current execution frame, or NULL if no frame is currently executing.
+*/
+func PyEval_GetLocals() *PyObject {
+	return togo(C.PyEval_GetLocals())
+}
+
+/*
+PyObject* PyEval_GetGlobals()
+Return value: Borrowed reference.
+Return a dictionary of the global variables in the current execution frame, or NULL if no frame is currently executing.
+*/
+func PyEval_GetGlobals() *PyObject {
+	return togo(C.PyEval_GetGlobals())
+}
+
+/*
+PyFrameObject* PyEval_GetFrame()
+Return value: Borrowed reference.
+Return the current thread state’s frame, which is NULL if no frame is currently executing.
+*/
+func PyEval_GetFrame() *PyFrameObject {
+	frame := (*C.PyFrameObject)(C.PyEval_GetFrame())
+	return &PyFrameObject{ptr:frame}
+}
+
+/*
+int PyFrame_GetLineNumber(PyFrameObject *frame)
+Return the line number that frame is currently executing.
+*/
+func PyFrame_GetLineNumber(frame *PyFrameObject) int {
+	return int(C.PyFrame_GetLineNumber(frame.ptr))
+}
+
+/*
+int PyEval_GetRestricted()
+If there is a current frame and it is executing in restricted mode, return true, otherwise false.
+*/
+func PyEval_GetRestricted() bool {
+	return int2bool(C.PyEval_GetRestricted())
+}
+
+/*
+const char* PyEval_GetFuncName(PyObject *func)
+Return the name of func if it is a function, class or instance object, else the name of funcs type.
+*/
+func PyEval_GetFuncName(fct *PyObject) string {
+	c_name := C.PyEval_GetFuncName(topy(fct))
+	return C.GoString(c_name)
+}
+
+/*
+const char* PyEval_GetFuncDesc(PyObject *func)
+Return a description string, depending on the type of func. Return values include “()” for functions and methods, ” constructor”, ” instance”, and ” object”. Concatenated with the result of PyEval_GetFuncName(), the result will be a description of func.
+*/
+func PyEval_GetFuncDesc(fct *PyObject) string {
+	c_name := C.PyEval_GetFuncDesc(topy(fct))
+	return C.GoString(c_name)
+}
 
 // EOF
