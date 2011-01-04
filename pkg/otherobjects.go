@@ -8,6 +8,10 @@ package python
 int _gopy_PyModule_Check(PyObject *p) { return PyModule_Check(p); }
 int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
+ int _gopy_PyClass_Check(PyObject *o) { return PyClass_Check(o); }
+
+ int _gopy_PyInstance_Check(PyObject *obj) { return PyInstance_Check(obj); }
+
 */
 import "C"
 import "unsafe"
@@ -137,6 +141,53 @@ New in version 2.6.
 func PyModule_AddStringMacro(self *PyObject, macro interface{}) os.Error {
 	//FIXME ?
 	panic("not implemented")
+}
+
+///// class /////
+
+/*
+int PyClass_Check(PyObject *o)
+Return true if the object o is a class object, including instances of types derived from the standard class object. Return false in all other cases.
+*/
+func PyClass_Check(o *PyObject) bool {
+	return int2bool(C._gopy_PyClass_Check(topy(o)))
+}
+
+/*
+int PyClass_IsSubclass(PyObject *klass, PyObject *base)
+Return true if klass is a subclass of base. Return false in all other cases.
+There are very few functions specific to instance objects.
+*/
+func PyClass_IsSubclass(klass, base *PyObject) bool {
+	return int2bool(C.PyClass_IsSubclass(topy(klass), topy(base)))
+}
+
+///// class /////
+
+/*
+int PyInstance_Check(PyObject *obj)
+Return true if obj is an instance.
+*/
+func PyInstance_Check(obj *PyObject) bool {
+	return int2bool(C._gopy_PyInstance_Check(topy(obj)))
+}
+
+/*
+PyObject* PyInstance_New(PyObject *class, PyObject *arg, PyObject *kw)
+Return value: New reference.
+Create a new instance of a specific class. The parameters arg and kw are used as the positional and keyword parameters to the object’s constructor.
+*/
+func PyInstance_New(class, arg, kw *PyObject) *PyObject {
+	return togo(C.PyInstance_New(topy(class), topy(arg), topy(kw)))
+}
+
+/*
+PyObject* PyInstance_NewRaw(PyObject *class, PyObject *dict)
+Return value: New reference.
+Create a new instance of a specific class without calling its constructor. class is the class of new object. The dict parameter will be used as the object’s __dict__; if NULL, a new dictionary will be created for the instance.
+*/
+func PyInstance_NewRaw(class, dict *PyObject) *PyObject {
+	return togo(C.PyInstance_NewRaw(topy(class), topy(dict)))
 }
 
 // EOF
