@@ -14,6 +14,14 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
  int _gopy_PyFunction_Check(PyObject *o) { return PyFunction_Check(o); }
 
+ int _gopy_PyMethod_Check(PyObject *o) { return PyMethod_Check(o); }
+
+ PyObject* _gopy_PyMethod_GET_CLASS(PyObject *meth) { return PyMethod_GET_CLASS(meth); }
+
+ PyObject* _gopy_PyMethod_GET_FUNCTION(PyObject *meth) { return PyMethod_GET_FUNCTION(meth); }
+
+ PyObject* _gopy_PyMethod_GET_SELF(PyObject *meth) { return PyMethod_GET_SELF(meth); }
+
 */
 import "C"
 import "unsafe"
@@ -278,4 +286,86 @@ func PyFunction_SetClosure(op, closure *PyObject) os.Error {
 	return int2err(C.PyFunction_SetClosure(topy(op), topy(closure)))
 }
 
+///// method /////
+
+/*
+int PyMethod_Check(PyObject *o)
+Return true if o is a method object (has type PyMethod_Type). The parameter must not be NULL.
+*/
+func PyMethod_Check(o *PyObject) bool {
+	return int2bool(C._gopy_PyMethod_Check(topy(o)))
+}
+
+/*
+PyObject* PyMethod_New(PyObject *func, PyObject *self, PyObject *class)
+Return value: New reference.
+Return a new method object, with func being any callable object; this is the function that will be called when the method is called. If this method should be bound to an instance, self should be the instance and class should be the class of self, otherwise self should be NULL and class should be the class which provides the unbound method..
+*/
+func PyMethod_New(fct, self, class *PyObject) *PyObject {
+	return togo(C.PyMethod_New(topy(fct), topy(self), topy(class)))
+}
+
+/*
+PyObject* PyMethod_Class(PyObject *meth)
+Return value: Borrowed reference.
+Return the class object from which the method meth was created; if this was created from an instance, it will be the class of the instance.
+*/
+func PyMethod_Class(meth *PyObject) *PyObject {
+	return togo(C.PyMethod_Class(topy(meth)))
+}
+
+/*
+PyObject* PyMethod_GET_CLASS(PyObject *meth)
+Return value: Borrowed reference.
+Macro version of PyMethod_Class() which avoids error checking.
+*/
+func PyMethod_GET_CLASS(meth *PyObject) *PyObject {
+	return togo(C._gopy_PyMethod_GET_CLASS(topy(meth)))
+}
+
+/*
+PyObject* PyMethod_Function(PyObject *meth)
+Return value: Borrowed reference.
+Return the function object associated with the method meth.
+*/
+func PyMethod_Function(meth *PyObject) *PyObject {
+	return togo(C.PyMethod_Function(topy(meth)))
+}
+
+/*
+PyObject* PyMethod_GET_FUNCTION(PyObject *meth)
+Return value: Borrowed reference.
+Macro version of PyMethod_Function() which avoids error checking.
+*/
+func PyMethod_GET_FUNCTION(meth *PyObject) *PyObject {
+	return togo(C._gopy_PyMethod_GET_FUNCTION(topy(meth)))
+}
+
+/*
+PyObject* PyMethod_Self(PyObject *meth)
+Return value: Borrowed reference.
+Return the instance associated with the method meth if it is bound, otherwise return NULL.
+*/
+func PyMethod_Self(meth *PyObject) *PyObject {
+	return togo(C.PyMethod_Self(topy(meth)))
+}
+
+/*
+PyObject* PyMethod_GET_SELF(PyObject *meth)
+Return value: Borrowed reference.
+Macro version of PyMethod_Self() which avoids error checking.
+*/
+func PyMethod_GET_SELF(meth *PyObject) *PyObject {
+	return togo(C._gopy_PyMethod_GET_SELF(topy(meth)))
+}
+
+/*
+int PyMethod_ClearFreeList()
+Clear the free list. Return the total number of freed items.
+
+New in version 2.6.
+*/
+func PyMethod_ClearFreeList() int {
+	return int(C.PyMethod_ClearFreeList())
+}
 // EOF
