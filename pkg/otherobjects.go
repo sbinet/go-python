@@ -12,6 +12,8 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
  int _gopy_PyInstance_Check(PyObject *obj) { return PyInstance_Check(obj); }
 
+ int _gopy_PyFunction_Check(PyObject *o) { return PyFunction_Check(o); }
+
 */
 import "C"
 import "unsafe"
@@ -188,6 +190,92 @@ Create a new instance of a specific class without calling its constructor. class
 */
 func PyInstance_NewRaw(class, dict *PyObject) *PyObject {
 	return togo(C.PyInstance_NewRaw(topy(class), topy(dict)))
+}
+
+///// function /////
+
+/*
+int PyFunction_Check(PyObject *o)
+Return true if o is a function object (has type PyFunction_Type). The parameter must not be NULL.
+*/
+func PyFunction_Check(o *PyObject) bool {
+	return int2bool(C._gopy_PyFunction_Check(topy(o)))
+}
+
+/*
+PyObject* PyFunction_New(PyObject *code, PyObject *globals)
+Return value: New reference.
+Return a new function object associated with the code object code. globals must be a dictionary with the global variables accessible to the function.
+
+The function’s docstring, name and __module__ are retrieved from the code object, the argument defaults and closure are set to NULL.
+*/
+func PyFunction_New(code, globals *PyObject) *PyObject {
+	return togo(C.PyFunction_New(topy(code), topy(globals)))
+}
+
+/*
+PyObject* PyFunction_GetCode(PyObject *op)
+Return value: Borrowed reference.
+Return the code object associated with the function object op.
+*/
+func PyFunction_GetCode(op *PyObject) *PyObject {
+	return togo(C.PyFunction_GetCode(topy(op)))
+}
+
+/*
+PyObject* PyFunction_GetGlobals(PyObject *op)
+Return value: Borrowed reference.
+Return the globals dictionary associated with the function object op.
+*/
+func PyFunction_GetGlobals(op *PyObject) *PyObject {
+	return togo(C.PyFunction_GetGlobals(topy(op)))
+}
+
+/*
+PyObject* PyFunction_GetModule(PyObject *op)
+Return value: Borrowed reference.
+Return the __module__ attribute of the function object op. This is normally a string containing the module name, but can be set to any other object by Python code.
+*/
+func PyFunction_GetModule(op *PyObject) *PyObject {
+	return togo(C.PyFunction_GetModule(topy(op)))
+}
+
+/*
+PyObject* PyFunction_GetDefaults(PyObject *op)
+Return value: Borrowed reference.
+Return the argument default values of the function object op. This can be a tuple of arguments or NULL.
+*/
+func PyFunction_GetDefaults(op *PyObject) *PyObject {
+	return togo(C.PyFunction_GetDefaults(topy(op)))
+}
+
+/*
+int PyFunction_SetDefaults(PyObject *op, PyObject *defaults)
+Set the argument default values for the function object op. defaults must be Py_None or a tuple.
+
+Raises SystemError and returns -1 on failure.
+*/
+func PyFunction_SetDefaults(op, defaults *PyObject) os.Error {
+	return int2err(C.PyFunction_SetDefaults(topy(op), topy(defaults)))
+}
+
+/*
+PyObject* PyFunction_GetClosure(PyObject *op)
+Return value: Borrowed reference.
+Return the closure associated with the function object op. This can be NULL or a tuple of cell objects.
+*/
+func PyFunction_GetClosure(op *PyObject) *PyObject {
+	return togo(C.PyFunction_GetClosure(topy(op)))
+}
+
+/*
+int PyFunction_SetClosure(PyObject *op, PyObject *closure)
+Set the closure associated with the function object op. closure must be Py_None or a tuple of cell objects.
+
+Raises SystemError and returns -1 on failure.
+*/
+func PyFunction_SetClosure(op, closure *PyObject) os.Error {
+	return int2err(C.PyFunction_SetClosure(topy(op), topy(closure)))
 }
 
 // EOF
