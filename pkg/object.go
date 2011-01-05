@@ -35,6 +35,13 @@ func int2bool(i C.int) bool {
 	return false
 }
 
+func bool2int(i bool) C.int {
+	if i {
+		return C.int(1)
+	}
+	return C.int(0)
+}
+
 type gopy_err struct {
 	err string
 }

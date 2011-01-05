@@ -16,6 +16,7 @@ CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)
 
 CGOFILES=\
 	veryhigh.go\
+	exceptions.go\
 	utilities.go\
 	object.go\
 	type.go\
