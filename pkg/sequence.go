@@ -246,8 +246,8 @@ Changed in version 2.5: This function used an int type for pos. This might requi
 */
 func PyTuple_SET_ITEM(self *PyObject, pos int, o *PyObject) {
 	py_self := topy(self)
-	py_pos  := C.Py_ssize_t(pos)
-	py_o    := topy(o)
+	py_pos := C.Py_ssize_t(pos)
+	py_o := topy(o)
 	C._gopy_PyTuple_SET_ITEM(py_self, py_pos, py_o)
 }
 
@@ -261,7 +261,7 @@ Changed in version 2.5: This function used an int type for newsize. This might r
 */
 func PyTuple_Resize(self *PyObject, newsize int) os.Error {
 	py_self := topy(self)
-	py_newsz:= C.Py_ssize_t(newsize)
+	py_newsz := C.Py_ssize_t(newsize)
 	err := C._PyTuple_Resize(&py_self, py_newsz)
 	return int2err(err)
 }
@@ -701,7 +701,7 @@ func PyString_Encode(s, encoding, errors string) *PyObject {
 
 	c_errors := C.CString(errors)
 	defer C.free(unsafe.Pointer(c_errors))
-	
+
 	// FIXME should check if len is len of rune or of string
 	return togo(C.PyString_Encode(c_s, C.Py_ssize_t(len(s)), c_encoding, c_errors))
 }
@@ -732,21 +732,21 @@ type Py_buffer struct {
 type PyBUF_Flag int
 
 const (
-	PyBUF_SIMPLE = PyBUF_Flag(C.PyBUF_SIMPLE)
-	PyBUF_WRITABLE = PyBUF_Flag(C.PyBUF_WRITABLE)
-	PyBUF_STRIDES = PyBUF_Flag(C.PyBUF_STRIDES)
-	PyBUF_ND = PyBUF_Flag(C.PyBUF_ND)
+	PyBUF_SIMPLE       = PyBUF_Flag(C.PyBUF_SIMPLE)
+	PyBUF_WRITABLE     = PyBUF_Flag(C.PyBUF_WRITABLE)
+	PyBUF_STRIDES      = PyBUF_Flag(C.PyBUF_STRIDES)
+	PyBUF_ND           = PyBUF_Flag(C.PyBUF_ND)
 	PyBUF_C_CONTIGUOUS = PyBUF_Flag(C.PyBUF_C_CONTIGUOUS)
-	PyBUF_INDIRECT = PyBUF_Flag(C.PyBUF_INDIRECT)
-	PyBUF_FORMAT = PyBUF_Flag(C.PyBUF_FORMAT)
-	PyBUF_STRIDED = PyBUF_Flag(C.PyBUF_STRIDED)
-	PyBUF_STRIDED_RO = PyBUF_Flag(C.PyBUF_STRIDED_RO)
-	PyBUF_RECORDS = PyBUF_Flag(C.PyBUF_RECORDS)
-	PyBUF_RECORDS_RO = PyBUF_Flag(C.PyBUF_RECORDS_RO)
-	PyBUF_FULL = PyBUF_Flag(C.PyBUF_FULL)
-	PyBUF_FULL_RO = PyBUF_Flag(C.PyBUF_FULL_RO)
-	PyBUF_CONTIG = PyBUF_Flag(C.PyBUF_CONTIG)
-	PyBUF_CONTIG_RO = PyBUF_Flag(C.PyBUF_CONTIG_RO)
+	PyBUF_INDIRECT     = PyBUF_Flag(C.PyBUF_INDIRECT)
+	PyBUF_FORMAT       = PyBUF_Flag(C.PyBUF_FORMAT)
+	PyBUF_STRIDED      = PyBUF_Flag(C.PyBUF_STRIDED)
+	PyBUF_STRIDED_RO   = PyBUF_Flag(C.PyBUF_STRIDED_RO)
+	PyBUF_RECORDS      = PyBUF_Flag(C.PyBUF_RECORDS)
+	PyBUF_RECORDS_RO   = PyBUF_Flag(C.PyBUF_RECORDS_RO)
+	PyBUF_FULL         = PyBUF_Flag(C.PyBUF_FULL)
+	PyBUF_FULL_RO      = PyBUF_Flag(C.PyBUF_FULL_RO)
+	PyBUF_CONTIG       = PyBUF_Flag(C.PyBUF_CONTIG)
+	PyBUF_CONTIG_RO    = PyBUF_Flag(C.PyBUF_CONTIG_RO)
 )
 
 /*
@@ -812,13 +812,13 @@ Copy len bytes of data pointed to by the contiguous chunk of memory pointed to b
 */
 func PyObject_CopyToObject(self *PyObject, buf []byte, fortran string) os.Error {
 	/*
-	c_buf := (*C.char)(unsafe.Pointer(&buf[0]))
-	c_for := C.char(fortran[0])
+		c_buf := (*C.char)(unsafe.Pointer(&buf[0]))
+		c_for := C.char(fortran[0])
 
-	py_self := self.ptr
-	//defer C.free(unsafe.Pointer(c_for))
-	err := C.PyObject_CopyToObject(py_self, c_buf, C.Py_ssize_t(len(buf)), c_for)
-	 */
+		py_self := self.ptr
+		//defer C.free(unsafe.Pointer(c_for))
+		err := C.PyObject_CopyToObject(py_self, c_buf, C.Py_ssize_t(len(buf)), c_for)
+	*/
 	//FIXME
 	panic("not implemented")
 }
@@ -893,7 +893,7 @@ Return a pointer to the buffer-info structure wrapped by the given object. The o
 */
 func PyMemoryView_GET_BUFFER(obj *PyObject) *Py_buffer {
 	buf := C._gopy_PyMemoryView_GET_BUFFER(topy(obj))
-	return &Py_buffer{ptr:buf}
+	return &Py_buffer{ptr: buf}
 }
 
 // EOF

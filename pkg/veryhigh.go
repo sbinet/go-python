@@ -19,11 +19,11 @@ Note that if an otherwise unhandled SystemError is raised, this function will no
 func Py_Main(args []string) int {
 	var argc C.int = C.int(len(args))
 	var argv []*C.char = make([]*C.char, argc)
-	for idx,arg := range args {
+	for idx, arg := range args {
 		argv[idx] = C.CString(arg)
 	}
 	defer func() {
-		for idx,_ := range argv {
+		for idx, _ := range argv {
 			C.free(unsafe.Pointer(argv[idx]))
 		}
 	}()
@@ -41,4 +41,3 @@ func PyRun_SimpleString(command string) int {
 }
 
 // EOF
-

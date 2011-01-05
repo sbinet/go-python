@@ -197,17 +197,17 @@ func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) os.Error {
 	if pos == nil {
 		return os.NewError("invalid position")
 	}
-	
+
 	c_pos := C.Py_ssize_t(*pos)
 	c_key := topy(*key)
 	c_val := topy(*value)
 
 	err := C.PyDict_Next(topy(self), &c_pos, &c_key, &c_val)
-	
+
 	*pos = int(c_pos)
 	*key = togo(c_key)
 	*value = togo(c_val)
-	
+
 	return int2err(err)
 }
 
@@ -217,7 +217,7 @@ Iterate over mapping object b adding key-value pairs to dictionary a. b may be a
 
 New in version 2.2.
 */
-func PyDict_Merge(a,b *PyObject, override int) os.Error {
+func PyDict_Merge(a, b *PyObject, override int) os.Error {
 	err := C.PyDict_Merge(topy(a), topy(b), C.int(override))
 	return int2err(err)
 }

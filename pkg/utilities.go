@@ -10,7 +10,7 @@ package python
 #else
  int _gopy_PyOS_CheckStack() { return 0; }
 #endif
- 
+
  PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }
 
  //void _gopy_PySys_WriteStdout(const char *data) {
@@ -35,7 +35,7 @@ Return true (nonzero) if the standard I/O file fp with name filename is deemed i
 func Py_FdIsInteractive(fp *C.FILE, fname string) bool {
 	c_fname := C.CString(fname)
 	defer C.free(unsafe.Pointer(c_fname))
-	return int2bool(C.Py_FdIsInteractive(fp,c_fname))
+	return int2bool(C.Py_FdIsInteractive(fp, c_fname))
 }
 
 /*
@@ -51,7 +51,7 @@ int PyOS_CheckStack()
 Return true when the interpreter runs out of stack space. This is a reliable check, but is only available when USE_STACKCHECK is defined (currently on Windows using the Microsoft Visual C++ compiler). USE_STACKCHECK will be defined automatically; you should never change the definition in your own code.
 */
 func PyOS_CheckStack() bool {
- 	return int2bool(C._gopy_PyOS_CheckStack())
+	return int2bool(C._gopy_PyOS_CheckStack())
 }
 
 /*
@@ -94,7 +94,7 @@ func PySys_GetFile(name string, def *C.FILE) *C.FILE {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 	//FIXME use go os.File ?
-	 return C.PySys_GetFile(c_name, def)
+	return C.PySys_GetFile(c_name, def)
 }
 
 /*
@@ -543,7 +543,7 @@ Return the current thread state’s frame, which is NULL if no frame is currentl
 */
 func PyEval_GetFrame() *PyFrameObject {
 	frame := (*C.PyFrameObject)(C.PyEval_GetFrame())
-	return &PyFrameObject{ptr:frame}
+	return &PyFrameObject{ptr: frame}
 }
 
 /*

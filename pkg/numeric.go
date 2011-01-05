@@ -275,9 +275,9 @@ Changed in version 2.5: If the integer is larger than LONG_MAX, a positive long 
 */
 func PyLong_FromVoidPtr(v interface{}) *PyObject {
 	/*
-	c_ptr := (*C.char)(unsafe.Pointer(v))
-	return togo(C.PyLong_FromVoidPtr(c_ptr))
-	 */
+		c_ptr := (*C.char)(unsafe.Pointer(v))
+		return togo(C.PyLong_FromVoidPtr(c_ptr))
+	*/
 	//FIXME
 	panic("not implemented")
 }

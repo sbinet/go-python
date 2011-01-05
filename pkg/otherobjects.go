@@ -417,15 +417,15 @@ Changed in version 2.5: This function used an int type for length and an int * t
 */
 func PySlice_GetIndices(slice *PySliceObject, length int) (start, stop, step int, err os.Error) {
 	c_start := C.Py_ssize_t(0)
-	c_stop  := C.Py_ssize_t(0)
-	c_step  := C.Py_ssize_t(0)
+	c_stop := C.Py_ssize_t(0)
+	c_step := C.Py_ssize_t(0)
 
 	err = int2err(C.PySlice_GetIndices(slice.ptr, C.Py_ssize_t(length),
 		&c_start, &c_stop, &c_step))
 
 	start = int(c_start)
-	stop  = int(c_stop)
-	step  = int(c_step)
+	stop = int(c_stop)
+	step = int(c_step)
 
 	return
 }
@@ -443,23 +443,23 @@ Changed in version 2.5: This function used an int type for length and an int * t
 func PySlice_GetIndicesEx(slice *PySliceObject, length int) (start, stop, step, slicelength int, err os.Error) {
 
 	c_start := C.Py_ssize_t(0)
-	c_stop  := C.Py_ssize_t(0)
-	c_step  := C.Py_ssize_t(0)
+	c_stop := C.Py_ssize_t(0)
+	c_step := C.Py_ssize_t(0)
 	c_slice := C.Py_ssize_t(0)
 
 	err = int2err(C.PySlice_GetIndicesEx(slice.ptr, C.Py_ssize_t(length),
 		&c_start, &c_stop, &c_step, &c_slice))
 
 	start = int(c_start)
-	stop  = int(c_stop)
-	step  = int(c_step)
-	slicelength  = int(c_slice)
+	stop = int(c_stop)
+	step = int(c_step)
+	slicelength = int(c_slice)
 
 	return
 }
 
 ///// capsule /////
-type PyCapsule_Destructor func (*PyObject)
+type PyCapsule_Destructor func(*PyObject)
 
 /*
 int PyCapsule_CheckExact(PyObject *p)
@@ -549,7 +549,7 @@ Import a pointer to a C object from a capsule attribute in a module. The name pa
 Return the capsule’s internal pointer on success. On failure, set an exception and return NULL. However, if PyCapsule_Import() failed to import the module, and no_block was true, no exception is set.
 */
 func PyCapsule_Import(name string, no_block bool) *C.char {
-	
+
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 

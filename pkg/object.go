@@ -25,7 +25,7 @@ func topy(self *PyObject) *C.PyObject {
 	return self.ptr
 }
 func togo(obj *C.PyObject) *PyObject {
-	return &PyObject{ptr:obj}
+	return &PyObject{ptr: obj}
 }
 
 func int2bool(i C.int) bool {
@@ -45,6 +45,7 @@ func bool2int(i bool) C.int {
 type gopy_err struct {
 	err string
 }
+
 func (self *gopy_err) String() string {
 	return self.err
 }
@@ -71,7 +72,7 @@ func (self *PyObject) HasAttrString(attr_name string) int {
 	c_attr_name := C.CString(attr_name)
 	defer C.free(unsafe.Pointer(c_attr_name))
 
-	return int(C.PyObject_HasAttrString(self.ptr,c_attr_name))
+	return int(C.PyObject_HasAttrString(self.ptr, c_attr_name))
 }
 
 /*
@@ -147,6 +148,7 @@ func (self *PyObject) DelAttrString(attr_name string) int {
 }
 
 type Py_OPID C.int
+
 const (
 	Py_LT Py_OPID = C.Py_LT
 	Py_LE Py_OPID = C.Py_LE
@@ -281,8 +283,7 @@ PyObject* PyObject_CallFunction(PyObject *callable, char *format, ...)
 Return value: New reference.
 Call a callable Python object callable, with a variable number of C arguments. The C arguments are described using a Py_BuildValue() style format string. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable, args) or callable(*args). Note that if you only pass PyObject * args, PyObject_CallFunctionObjArgs() is a faster alternative.
 */
-func
-(self *PyObject) CallFunction(format string, args ...interface{}) *PyObject {
+func (self *PyObject) CallFunction(format string, args ...interface{}) *PyObject {
 	//FIXME
 	panic("not implemented")
 	return nil
@@ -293,8 +294,7 @@ PyObject* PyObject_CallMethod(PyObject *o, char *method, char *format, ...)
 Return value: New reference.
 Call the method named method of object o with a variable number of C arguments. The C arguments are described by a Py_BuildValue() format string that should produce a tuple. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression o.method(args). Note that if you only pass PyObject * args, PyObject_CallMethodObjArgs() is a faster alternative.
 */
-func
-(self *PyObject) CallMethod(format string, args ...interface{}) *PyObject {
+func (self *PyObject) CallMethod(format string, args ...interface{}) *PyObject {
 	//FIXME
 	panic("not implemented")
 	return nil
