@@ -3,3 +3,16 @@ go-python
 
 Naive 'go' bindings towards the C-API of CPython
 
+this package provides a ``go`` package named "python" under which most of the ``PyXYZ`` functions and macros of the public C-API of CPython have been exposed.
+
+theoretically, you should be able to just look at:
+
+  http://docs.python.org/c-api/index.html
+
+and know what to type in your ``go`` program.
+
+
+this package also provides an executable "go-python" which just loads "python" and then call ``python.Py_Main(os.Args)``.
+the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convulated functions hops)
+
+
