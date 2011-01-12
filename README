@@ -22,7 +22,7 @@ TODO:
 
  - add CPython unit-tests
 
- - do not expose ``C.FILE`` pointer and replace is with ``os.File`` in "go-python" API
+ - do not expose ``C.FILE`` pointer and replace it with ``os.File`` in "go-python" API
 
  - provide an easy way to extend go-python with ``go`` based extensions
 
