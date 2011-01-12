@@ -26,3 +26,4 @@ TODO:
 
  - provide an easy way to extend go-python with ``go`` based extensions
 
+ - think about the need (or not) to translate CPython exceptions into go panic/recover mechanism
