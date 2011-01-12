@@ -15,4 +15,14 @@ and know what to type in your ``go`` program.
 this package also provides an executable "go-python" which just loads "python" and then call ``python.Py_Main(os.Args)``.
 the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convulated functions hops)
 
+TODO:
+-----
+
+ - fix handling of integers (I did a poor job at making sure everything was ok)
+
+ - add CPython unit-tests
+
+ - do not expose ``C.FILE`` pointer and replace is with ``os.File`` in "go-python" API
+
+ - provide an easy way to extend go-python with ``go`` based extensions
 
