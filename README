@@ -13,7 +13,7 @@ and know what to type in your ``go`` program.
 
 
 this package also provides an executable "go-python" which just loads "python" and then call ``python.Py_Main(os.Args)``.
-the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convulated functions hops)
+the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convoluted functions hops)
 
 TODO:
 -----
