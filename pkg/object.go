@@ -58,6 +58,14 @@ func int2err(i C.int) os.Error {
 	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%i)", int(i))}
 }
 
+func file2py(f *os.File) *C.FILE {
+	return nil
+}
+
+func file2go(f *C.FILE) *os.File {
+	return nil
+}
+
 // int PyObject_HasAttr(PyObject *o, PyObject *attr_name)
 // Returns 1 if o has the attribute attr_name, and 0 otherwise. This is equivalent to the Python expression hasattr(o, attr_name). This function always succeeds.
 func (self *PyObject) HasAttr(attr_name *PyObject) int {
