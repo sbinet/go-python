@@ -29,7 +29,28 @@ func togo(obj *C.PyObject) *PyObject {
 }
 
 func int2bool(i C.int) bool {
-	if i != 0 {
+	switch i {
+	case -1:
+		return false
+	case 0:
+		return false
+	case 1:
+		return true
+	default:
+		return true
+	}
+	return false
+}
+
+func long2bool(i C.long) bool {
+	switch i {
+	case -1:
+		return false
+	case 0:
+		return false
+	case 1:
+		return true
+	default:
 		return true
 	}
 	return false
@@ -280,25 +301,38 @@ Calls a method of the object o, where the name of the method is given as a Pytho
 New in version 2.2.
 */
 
-/*
-long PyObject_Hash(PyObject *o)
-Compute and return the hash value of an object o. On failure, return -1. This is the equivalent of the Python expression hash(o).
+// long PyObject_Hash(PyObject *o)
+// Compute and return the hash value of an object o. On failure, return -1. This is the equivalent of the Python expression hash(o).
+func (self *PyObject) Hash() int64 {
+	return int64(C.PyObject_Hash(topy(self)))
+}
 
-long PyObject_HashNotImplemented(PyObject *o)
-Set a TypeError indicating that type(o) is not hashable and return -1. This function receives special treatment when stored in a tp_hash slot, allowing a type to explicitly indicate to the interpreter that it is not hashable.
+// long PyObject_HashNotImplemented(PyObject *o)
+// Set a TypeError indicating that type(o) is not hashable and return -1. This function receives special treatment when stored in a tp_hash slot, allowing a type to explicitly indicate to the interpreter that it is not hashable.
+//
+// New in version 2.6.
+func (self *PyObject) HashNotImplemented() bool {
+	return long2bool(C.PyObject_HashNotImplemented(topy(self)))
+}
 
-New in version 2.6.
-*/
+// int PyObject_IsTrue(PyObject *o)
+// Returns 1 if the object o is considered to be true, and 0 otherwise. This is equivalent to the Python expression not not o. On failure, return -1.
+func (self *PyObject) IsTrue() bool {
+	return int2bool(C.PyObject_IsTrue(topy(self)))
+}
 
-/*
-int PyObject_IsTrue(PyObject *o)
-Returns 1 if the object o is considered to be true, and 0 otherwise. This is equivalent to the Python expression not not o. On failure, return -1.
-int PyObject_Not(PyObject *o)
-Returns 0 if the object o is considered to be true, and 1 otherwise. This is equivalent to the Python expression not o. On failure, return -1.
-PyObject* PyObject_Type(PyObject *o)
-Return value: New reference.
-When o is non-NULL, returns a type object corresponding to the object type of object o. On failure, raises SystemError and returns NULL. This is equivalent to the Python expression type(o). This function increments the reference count of the return value. There’s really no reason to use this function instead of the common expression o->ob_type, which returns a pointer of type PyTypeObject*, except when the incremented reference count is needed.
-*/
+// int PyObject_Not(PyObject *o)
+// Returns 0 if the object o is considered to be true, and 1 otherwise. This is equivalent to the Python expression not o. On failure, return -1.
+func (self *PyObject) Not() bool {
+	return int2bool(C.PyObject_Not(topy(self)))
+}
+
+// PyObject* PyObject_Type(PyObject *o)
+// Return value: New reference.
+// When o is non-NULL, returns a type object corresponding to the object type of object o. On failure, raises SystemError and returns NULL. This is equivalent to the Python expression type(o). This function increments the reference count of the return value. There’s really no reason to use this function instead of the common expression o->ob_type, which returns a pointer of type PyTypeObject*, except when the incremented reference count is needed.
+func (self *PyObject) Type() *PyObject {
+	return togo(C.PyObject_Type(topy(self)))
+}
 
 
 // EOF
