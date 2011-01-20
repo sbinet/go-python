@@ -406,20 +406,20 @@ func PyFloat_FromString(str *PyObject) *PyObject {
 // PyObject* PyFloat_FromDouble(double v)
 // Return value: New reference.
 // Create a PyFloatObject object from v, or NULL on failure.
-func PyFloat_FromDouble(v float) *PyObject {
+func PyFloat_FromDouble(v float32) *PyObject {
 	return togo(C.PyFloat_FromDouble(C.double(v)))
 }
 
 // double PyFloat_AsDouble(PyObject *pyfloat)
 // Return a C double representation of the contents of pyfloat. If pyfloat is not a Python floating point object but has a __float__() method, this method will first be called to convert pyfloat into a float.
-func PyFloat_AsDouble(self *PyObject) float {
-	return float(C.PyFloat_AsDouble(topy(self)))
+func PyFloat_AsDouble(self *PyObject) float32 {
+	return float32(C.PyFloat_AsDouble(topy(self)))
 }
 
 // double PyFloat_AS_DOUBLE(PyObject *pyfloat)
 // Return a C double representation of the contents of pyfloat, but without error checking.
-func PyFloat_AS_DOUBLE(self *PyObject) float {
-	return float(C._gopy_PyFloat_AS_DOUBLE(topy(self)))
+func PyFloat_AS_DOUBLE(self *PyObject) float32 {
+	return float32(C._gopy_PyFloat_AS_DOUBLE(topy(self)))
 }
 
 // PyObject* PyFloat_GetInfo(void)
@@ -434,16 +434,16 @@ func PyFloat_GetInfo() *PyObject {
 // Return the maximum representable finite float DBL_MAX as C double.
 //
 // New in version 2.6.
-func PyFloat_GetMax() float {
-	return float(C.PyFloat_GetMax())
+func PyFloat_GetMax() float32 {
+	return float32(C.PyFloat_GetMax())
 }
 
 // double PyFloat_GetMin()
 // Return the minimum normalized positive float DBL_MIN as C double.
 //
 // New in version 2.6.
-func PyFloat_GetMin() float {
-	return float(C.PyFloat_GetMin())
+func PyFloat_GetMin() float32 {
+	return float32(C.PyFloat_GetMin())
 }
 
 // int PyFloat_ClearFreeList()
