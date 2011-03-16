@@ -1,7 +1,7 @@
 package main
 
 import "fmt"
-import "python"
+import "bitbucket.org/binet/python/pkg"
 
 func main() {
 	gostr := "foo"
