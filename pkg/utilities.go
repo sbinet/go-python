@@ -6,9 +6,9 @@ package python
 #include <string.h>
 
 #ifdef USE_STACKCHECK
- int _gopy_PyOS_CheckStack() { return PyOS_CheckStack(); }
+ int _gopy_PyOS_CheckStack(void) { return PyOS_CheckStack(); }
 #else
- int _gopy_PyOS_CheckStack() { return 0; }
+ int _gopy_PyOS_CheckStack(void) { return 0; }
 #endif
 
  PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }

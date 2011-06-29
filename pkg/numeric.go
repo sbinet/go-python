@@ -9,8 +9,8 @@ package python
 //int _gopy_PyLong_Check(PyObject *o) { return PyLong_Check(o); }
 //int _gopy_PyLong_CheckExact(PyObject *o) { return PyLong_CheckExact(o); }
 //int _gopy_PyBool_Check(PyObject *o) { return PyBool_Check(o); }
-//PyObject *_gopy_pyfalse() { return Py_False; }
-//PyObject *_gopy_pytrue() { return Py_True; }
+//PyObject *_gopy_pyfalse(void) { return Py_False; }
+//PyObject *_gopy_pytrue(void) { return Py_True; }
 //int _gopy_PyFloat_Check(PyObject *o) { return PyFloat_Check(o); }
 //int _gopy_PyFloat_CheckExact(PyObject *o) { return PyFloat_CheckExact(o); }
 //double _gopy_PyFloat_AS_DOUBLE(PyObject *pyfloat) { return PyFloat_AS_DOUBLE(pyfloat); }
