@@ -7,7 +7,7 @@ include ${GOROOT}/src/Make.inc
 all: install
 
 DIRS=\
-        pkg\
+        pkg/python\
         tests\
         cmd\
 

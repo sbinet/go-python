@@ -4,7 +4,7 @@
 
 include $(GOROOT)/src/Make.inc
 
-TARG=bitbucket.org/binet/python/pkg
+TARG=bitbucket.org/binet/go-python/pkg/python
 
 PYTHON:=python2
 PYTHON_VERSION:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(''.join(distutils.sysconfig.get_config_vars('VERSION'))+'\n')"`
