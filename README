@@ -16,6 +16,12 @@ this package also provides an executable "go-python" which just loads "python" a
 the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convoluted functions hops)
 
 
+Install:
+--------
+
+ $ goinstall bitbucket.org/binet/go-python/pkg/python
+
+
 Example:
 --------
 
@@ -35,6 +41,7 @@ Example:
 $ gorun ./main.go
 hello [ foo ]
 
+
 TODO:
 -----
 
@@ -47,3 +54,5 @@ TODO:
  - provide an easy way to extend go-python with ``go`` based extensions
 
  - think about the need (or not) to translate CPython exceptions into go panic/recover mechanism
+
+ - use SWIG to automatically wrap the whole CPython api ?
