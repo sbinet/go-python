@@ -7,7 +7,7 @@ package python
 //int _gopy_PyType_CheckExact(PyObject *o) { return PyType_CheckExact(o); }
 import "C"
 //import "unsafe"
-import "os"
+
 
 type PyTypeObject struct {
 	ptr *C.PyTypeObject
@@ -90,7 +90,7 @@ func PyType_GenericNew(self *PyTypeObject, args, kwds *PyObject) *PyObject {
 // Finalize a type object. This should be called on all type objects to finish their initialization. This function is responsible for adding inherited slots from a type’s base class. Return 0 on success, or return -1 and sets an exception on error.
 //
 // New in version 2.2.
-func PyType_Ready(self *PyTypeObject) os.Error {
+func PyType_Ready(self *PyTypeObject) error {
 	return int2err(C.PyType_Ready(self.ptr))
 }
 

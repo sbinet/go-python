@@ -6,8 +6,10 @@ package python
 //int _gopy_PyDict_Check(PyObject *o) { return PyDict_Check(o); }
 //int _gopy_PyDict_CheckExact(PyObject *o) { return PyDict_CheckExact(o); }
 import "C"
-import "unsafe"
-import "os"
+import (
+	"errors"
+	"unsafe"
+)
 
 // int PyDict_Check(PyObject *p)
 // Return true if p is a dict object or an instance of a subtype of the dict type.
@@ -47,12 +49,11 @@ func PyDict_Clear(self *PyObject) {
 	C.PyDict_Clear(topy(self))
 }
 
-
 // int PyDict_Contains(PyObject *p, PyObject *key)
 // Determine if dictionary p contains key. If an item in p is matches key, return 1, otherwise return 0. On error, return -1. This is equivalent to the Python expression key in p.
 //
 // New in version 2.4.
-func PyDict_Contains(self, key *PyObject) (bool, os.Error) {
+func PyDict_Contains(self, key *PyObject) (bool, error) {
 	err := C.PyDict_Contains(topy(self), topy(key))
 	if err != -1 {
 		return int2bool(err), nil
@@ -73,7 +74,7 @@ func PyDict_Copy(self *PyObject) *PyObject {
 // Insert value into the dictionary p with a key of key. key must be hashable; if it isn’t, TypeError will be raised. Return 0 on success or -1 on failure.
 // int PyDict_SetItemString(PyObject *p, const char *key, PyObject *val)
 // Insert value into the dictionary p using key as a key. key should be a char*. The key object is created using PyString_FromString(key). Return 0 on success or -1 on failure.
-func PyDict_SetItem(self, key, val *PyObject) os.Error {
+func PyDict_SetItem(self, key, val *PyObject) error {
 	err := C.PyDict_SetItem(topy(self), topy(key), topy(val))
 	return int2err(err)
 }
@@ -82,7 +83,7 @@ func PyDict_SetItem(self, key, val *PyObject) os.Error {
 // Remove the entry in dictionary p with key key. key must be hashable; if it isn’t, TypeError is raised. Return 0 on success or -1 on failure.
 // int PyDict_DelItemString(PyObject *p, char *key)
 // Remove the entry in dictionary p which has a key specified by the string key. Return 0 on success or -1 on failure.
-func PyDict_DelItem(self, key *PyObject) os.Error {
+func PyDict_DelItem(self, key *PyObject) error {
 	err := C.PyDict_DelItem(topy(self), topy(key))
 	return int2err(err)
 }
@@ -162,9 +163,9 @@ func PyDict_Size(self *PyObject) int {
 //     Py_DECREF(o);
 // }
 // Changed in version 2.5: This function used an int * type for ppos. This might require changes in your code for properly supporting 64-bit systems.
-func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) os.Error {
+func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) error {
 	if pos == nil {
-		return os.NewError("invalid position")
+		return errors.New("invalid position")
 	}
 
 	c_pos := C.Py_ssize_t(*pos)
@@ -184,7 +185,7 @@ func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) os.Error {
 // Iterate over mapping object b adding key-value pairs to dictionary a. b may be a dictionary, or any object supporting PyMapping_Keys() and PyObject_GetItem(). If override is true, existing pairs in a will be replaced if a matching key is found in b, otherwise pairs will only be added if there is not a matching key in a. Return 0 on success or -1 if an exception was raised.
 //
 // New in version 2.2.
-func PyDict_Merge(a, b *PyObject, override int) os.Error {
+func PyDict_Merge(a, b *PyObject, override int) error {
 	err := C.PyDict_Merge(topy(a), topy(b), C.int(override))
 	return int2err(err)
 }
@@ -193,7 +194,7 @@ func PyDict_Merge(a, b *PyObject, override int) os.Error {
 // This is the same as PyDict_Merge(a, b, 1) in C, or a.update(b) in Python. Return 0 on success or -1 if an exception was raised.
 //
 // New in version 2.2.
-func PyDict_Update(a, b *PyObject) os.Error {
+func PyDict_Update(a, b *PyObject) error {
 	err := C.PyDict_Update(topy(a), topy(b))
 	return int2err(err)
 }
@@ -206,7 +207,7 @@ func PyDict_Update(a, b *PyObject) os.Error {
 //         if override or key not in a:
 //             a[key] = value
 // New in version 2.2.
-func PyDict_MergeFromSeq2(a, seq2 *PyObject, override int) os.Error {
+func PyDict_MergeFromSeq2(a, seq2 *PyObject, override int) error {
 	err := C.PyDict_MergeFromSeq2(topy(a), topy(seq2), C.int(override))
 	return int2err(err)
 }

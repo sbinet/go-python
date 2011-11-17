@@ -67,11 +67,11 @@ type gopy_err struct {
 	err string
 }
 
-func (self *gopy_err) String() string {
+func (self *gopy_err) Error() string {
 	return self.err
 }
 
-func int2err(i C.int) os.Error {
+func int2err(i C.int) error {
 	if i == 0 {
 		return nil
 	}
@@ -333,6 +333,5 @@ func (self *PyObject) Not() bool {
 func (self *PyObject) Type() *PyObject {
 	return togo(C.PyObject_Type(topy(self)))
 }
-
 
 // EOF

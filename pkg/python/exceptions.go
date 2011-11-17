@@ -20,7 +20,7 @@ int _gopy_PyErr_WarnPy3k(char *message, int stacklevel)
 */
 import "C"
 import "unsafe"
-import "os"
+
 //import "fmt"
 
 // void PyErr_PrintEx(int set_sys_last_vars)
@@ -192,7 +192,6 @@ func PyErr_SetExcFromWindowsErrWithFilename(typ *PyObject, ierr bool, filename s
 	return togo(C.PyErr_SetExcFromWindowsErrWithFilename(topy(typ), c_ierr, c_filename))
 }
 
-
 // void PyErr_BadInternalCall()
 // This is a shorthand for PyErr_SetString(PyExc_SystemError, message), where message indicates that an internal operation (e.g. a Python/C API function) was invoked with an illegal argument. It is mostly for internal use.
 func PyErr_BadInternalCall() {
@@ -207,7 +206,7 @@ func PyErr_BadInternalCall() {
 // Warning categories must be subclasses of Warning; the default warning category is RuntimeWarning. The standard Python warning categories are available as global variables whose names are PyExc_ followed by the Python exception name. These have the type PyObject*; they are all class objects. Their names are PyExc_Warning, PyExc_UserWarning, PyExc_UnicodeWarning, PyExc_DeprecationWarning, PyExc_SyntaxWarning, PyExc_RuntimeWarning, and PyExc_FutureWarning. PyExc_Warning is a subclass of PyExc_Exception; the other warning categories are subclasses of PyExc_Warning.
 //
 // For information about warning control, see the documentation for the warnings module and the -W option in the command line documentation. There is no C API for warning control.
-func PyErr_WarnEx(category *PyObject, message string, stacklevel int) os.Error {
+func PyErr_WarnEx(category *PyObject, message string, stacklevel int) error {
 	c_message := C.CString(message)
 	defer C.free(unsafe.Pointer(c_message))
 
@@ -223,7 +222,7 @@ Deprecated; use PyErr_WarnEx() instead.
 
 // int PyErr_WarnExplicit(PyObject *category, const char *message, const char *filename, int lineno, const char *module, PyObject *registry)
 // Issue a warning message with explicit control over all warning attributes. This is a straightforward wrapper around the Python function warnings.warn_explicit(), see there for more information. The module and registry arguments may be set to NULL to get the default effect described there.
-func PyErr_WarnExplicit(category *PyObject, message, filename string, lineno int, module string, registry *PyObject) os.Error {
+func PyErr_WarnExplicit(category *PyObject, message, filename string, lineno int, module string, registry *PyObject) error {
 	c_message := C.CString(message)
 	defer C.free(unsafe.Pointer(c_message))
 
@@ -240,7 +239,7 @@ func PyErr_WarnExplicit(category *PyObject, message, filename string, lineno int
 // int PyErr_WarnPy3k(char *message, int stacklevel)
 // Issue a DeprecationWarning with the given message and stacklevel if the Py_Py3kWarningFlag flag is enabled.
 // New in version 2.6.
-func PyErr_WarnPy3k(message string, stacklevel int) os.Error {
+func PyErr_WarnPy3k(message string, stacklevel int) error {
 	c_message := C.CString(message)
 	defer C.free(unsafe.Pointer(c_message))
 

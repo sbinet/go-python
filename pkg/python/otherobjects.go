@@ -38,7 +38,6 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 */
 import "C"
 import "unsafe"
-import "os"
 
 ///// module /////
 
@@ -95,7 +94,7 @@ func PyModule_GetFilename(self *PyObject) string {
 // Add an object to module as name. This is a convenience function which can be used from the module’s initialization function. This steals a reference to value. Return -1 on error, 0 on success.
 //
 // New in version 2.0.
-func PyModule_AddObject(self *PyObject, name string, value *PyObject) os.Error {
+func PyModule_AddObject(self *PyObject, name string, value *PyObject) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 
@@ -106,7 +105,7 @@ func PyModule_AddObject(self *PyObject, name string, value *PyObject) os.Error {
 // Add an integer constant to module as name. This convenience function can be used from the module’s initialization function. Return -1 on error, 0 on success.
 //
 // New in version 2.0.
-func PyModule_AddIntConstant(self *PyObject, name string, value int) os.Error {
+func PyModule_AddIntConstant(self *PyObject, name string, value int) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 
@@ -117,7 +116,7 @@ func PyModule_AddIntConstant(self *PyObject, name string, value int) os.Error {
 // Add a string constant to module as name. This convenience function can be used from the module’s initialization function. The string value must be null-terminated. Return -1 on error, 0 on success.
 //
 // New in version 2.0.
-func PyModule_AddStringConstant(self *PyObject, name, value string) os.Error {
+func PyModule_AddStringConstant(self *PyObject, name, value string) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 
@@ -131,7 +130,7 @@ func PyModule_AddStringConstant(self *PyObject, name, value string) os.Error {
 // Add an int constant to module. The name and the value are taken from macro. For example PyModule_AddConstant(module, AF_INET) adds the int constant AF_INET with the value of AF_INET to module. Return -1 on error, 0 on success.
 //
 // New in version 2.6.
-func PyModule_AddIntMacro(self *PyObject, macro interface{}) os.Error {
+func PyModule_AddIntMacro(self *PyObject, macro interface{}) error {
 	//FIXME ?
 	panic("not implemented")
 }
@@ -139,7 +138,7 @@ func PyModule_AddIntMacro(self *PyObject, macro interface{}) os.Error {
 // int PyModule_AddStringMacro(PyObject *module, macro)
 // Add a string constant to module.
 // New in version 2.6.
-func PyModule_AddStringMacro(self *PyObject, macro interface{}) os.Error {
+func PyModule_AddStringMacro(self *PyObject, macro interface{}) error {
 	//FIXME ?
 	panic("not implemented")
 }
@@ -230,7 +229,7 @@ func PyFunction_GetDefaults(op *PyObject) *PyObject {
 // Set the argument default values for the function object op. defaults must be Py_None or a tuple.
 //
 // Raises SystemError and returns -1 on failure.
-func PyFunction_SetDefaults(op, defaults *PyObject) os.Error {
+func PyFunction_SetDefaults(op, defaults *PyObject) error {
 	return int2err(C.PyFunction_SetDefaults(topy(op), topy(defaults)))
 }
 
@@ -245,7 +244,7 @@ func PyFunction_GetClosure(op *PyObject) *PyObject {
 // Set the closure associated with the function object op. closure must be Py_None or a tuple of cell objects.
 //
 // Raises SystemError and returns -1 on failure.
-func PyFunction_SetClosure(op, closure *PyObject) os.Error {
+func PyFunction_SetClosure(op, closure *PyObject) error {
 	return int2err(C.PyFunction_SetClosure(topy(op), topy(closure)))
 }
 
@@ -341,7 +340,7 @@ func PySlice_New(start, stop, step *PyObject) *PyObject {
 // You probably do not want to use this function. If you want to use slice objects in versions of Python prior to 2.3, you would probably do well to incorporate the source of PySlice_GetIndicesEx(), suitably renamed, in the source of your extension.
 //
 // Changed in version 2.5: This function used an int type for length and an int * type for start, stop, and step. This might require changes in your code for properly supporting 64-bit systems.
-func PySlice_GetIndices(slice *PySliceObject, length int) (start, stop, step int, err os.Error) {
+func PySlice_GetIndices(slice *PySliceObject, length int) (start, stop, step int, err error) {
 	c_start := C.Py_ssize_t(0)
 	c_stop := C.Py_ssize_t(0)
 	c_step := C.Py_ssize_t(0)
@@ -364,7 +363,7 @@ func PySlice_GetIndices(slice *PySliceObject, length int) (start, stop, step int
 // New in version 2.3.
 //
 // Changed in version 2.5: This function used an int type for length and an int * type for start, stop, step, and slicelength. This might require changes in your code for properly supporting 64-bit systems.
-func PySlice_GetIndicesEx(slice *PySliceObject, length int) (start, stop, step, slicelength int, err os.Error) {
+func PySlice_GetIndicesEx(slice *PySliceObject, length int) (start, stop, step, slicelength int, err error) {
 
 	c_start := C.Py_ssize_t(0)
 	c_stop := C.Py_ssize_t(0)
@@ -490,7 +489,7 @@ func PyCapsule_IsValid(capsule *PyObject, name string) bool {
 // Set the context pointer inside capsule to context.
 //
 // Return 0 on success. Return nonzero and set an exception on failure.
-func PyCapsule_SetContext(capsule *PyObject, context *C.char) os.Error {
+func PyCapsule_SetContext(capsule *PyObject, context *C.char) error {
 	//FIXME use interface{} instead of *C.char ?
 	return int2err(C.PyCapsule_SetContext(topy(capsule), unsafe.Pointer(context)))
 }
@@ -499,29 +498,27 @@ func PyCapsule_SetContext(capsule *PyObject, context *C.char) os.Error {
 // Set the destructor inside capsule to destructor.
 //
 // Return 0 on success. Return nonzero and set an exception on failure.
-func PyCapsule_SetDestructor(capsule *PyObject, dtor C.PyCapsule_Destructor) os.Error {
+func PyCapsule_SetDestructor(capsule *PyObject, dtor C.PyCapsule_Destructor) error {
 	//FIXME use go-PyCapsule_Destructor instead of cgo one ?
 	return int2err(C.PyCapsule_SetDestructor(topy(capsule), dtor))
 }
-
 
 // int PyCapsule_SetName(PyObject *capsule, const char *name)
 // Set the name inside capsule to name. If non-NULL, the name must outlive the capsule. If the previous name stored in the capsule was not NULL, no attempt is made to free it.
 //
 // Return 0 on success. Return nonzero and set an exception on failure.
-func PyCapsule_SetName(capsule *PyObject, name string) os.Error {
+func PyCapsule_SetName(capsule *PyObject, name string) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 
 	return int2err(C.PyCapsule_SetName(topy(capsule), c_name))
 }
 
-
 // int PyCapsule_SetPointer(PyObject *capsule, void *pointer)
 // Set the void pointer inside capsule to pointer. The pointer may not be NULL.
 //
 // Return 0 on success. Return nonzero and set an exception on failure.
-func PyCapsule_SetPointer(capsule *PyObject, pointer *C.char) os.Error {
+func PyCapsule_SetPointer(capsule *PyObject, pointer *C.char) error {
 	//FIXME use interface{} instead of *C.char ?
 	return int2err(C.PyCapsule_SetPointer(topy(capsule), unsafe.Pointer(pointer)))
 }

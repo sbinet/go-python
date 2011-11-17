@@ -36,7 +36,6 @@ int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj)
 */
 import "C"
 import "unsafe"
-import "os"
 
 //////// bytearray ////////
 
@@ -89,7 +88,7 @@ func PyByteArray_AsString(self *PyObject) string {
 
 // int PyByteArray_Resize(PyObject *bytearray, Py_ssize_t len)
 // Resize the internal buffer of bytearray to len.
-func PyByteArray_Resize(self *PyObject, sz int) os.Error {
+func PyByteArray_Resize(self *PyObject, sz int) error {
 	return int2err(C.PyByteArray_Resize(topy(self), C.Py_ssize_t(sz)))
 }
 
@@ -193,7 +192,7 @@ func PyTuple_GetSlice(self *PyObject, low, high int) *PyObject {
 //
 // Note This function “steals” a reference to o.
 // Changed in version 2.5: This function used an int type for pos. This might require changes in your code for properly supporting 64-bit systems.
-func PyTuple_SetItem(self *PyObject, pos int, o *PyObject) os.Error {
+func PyTuple_SetItem(self *PyObject, pos int, o *PyObject) error {
 	return int2err(C.PyTuple_SetItem(topy(self), C.Py_ssize_t(pos), topy(o)))
 }
 
@@ -215,7 +214,7 @@ func PyTuple_SET_ITEM(self *PyObject, pos int, o *PyObject) {
 // Changed in version 2.2: Removed unused third parameter, last_is_sticky.
 //
 // Changed in version 2.5: This function used an int type for newsize. This might require changes in your code for properly supporting 64-bit systems.
-func PyTuple_Resize(self *PyObject, newsize int) os.Error {
+func PyTuple_Resize(self *PyObject, newsize int) error {
 	py_self := topy(self)
 	py_newsz := C.Py_ssize_t(newsize)
 	err := C._PyTuple_Resize(&py_self, py_newsz)
@@ -297,7 +296,7 @@ func PyList_GET_ITEM(self *PyObject, index int) *PyObject {
 //
 // Note This function “steals” a reference to item and discards a reference to an item already in the list at the affected position.
 // Changed in version 2.5: This function used an int for index. This might require changes in your code for properly supporting 64-bit systems.
-func PyList_SetItem(self *PyObject, index int, item *PyObject) os.Error {
+func PyList_SetItem(self *PyObject, index int, item *PyObject) error {
 	err := C.PyList_SetItem(topy(self), C.Py_ssize_t(index), topy(item))
 	return int2err(err)
 }
@@ -315,7 +314,7 @@ func PyList_SET_ITEM(self *PyObject, index int, o *PyObject) {
 // Insert the item item into list list in front of index index. Return 0 if successful; return -1 and set an exception if unsuccessful. Analogous to list.insert(index, item).
 //
 // Changed in version 2.5: This function used an int for index. This might require changes in your code for properly supporting 64-bit systems.
-func PyList_Insert(self *PyObject, index int, item *PyObject) os.Error {
+func PyList_Insert(self *PyObject, index int, item *PyObject) error {
 	err := C.PyList_Insert(topy(self), C.Py_ssize_t(index), topy(item))
 	return int2err(err)
 }
@@ -327,7 +326,7 @@ func PyList_Insert(self *PyObject, index int, item *PyObject) os.Error {
 // Return a list of the objects in list containing the objects between low and high. Return NULL and set an exception if unsuccessful. Analogous to list[low:high]. Negative indices, as when slicing from Python, are not supported.
 //
 // Changed in version 2.5: This function used an int for low and high. This might require changes in your code for properly supporting 64-bit systems.
-func PyList_Append(self, item *PyObject) os.Error {
+func PyList_Append(self, item *PyObject) error {
 	err := C.PyList_Append(topy(self), topy(item))
 	return int2err(err)
 }
@@ -336,7 +335,7 @@ func PyList_Append(self, item *PyObject) os.Error {
 // Set the slice of list between low and high to the contents of itemlist. Analogous to list[low:high] = itemlist. The itemlist may be NULL, indicating the assignment of an empty list (slice deletion). Return 0 on success, -1 on failure. Negative indices, as when slicing from Python, are not supported.
 //
 // Changed in version 2.5: This function used an int for low and high. This might require changes in your code for properly supporting 64-bit systems.
-func PyList_SetSlice(self *PyObject, low, high int, itemlist *PyObject) os.Error {
+func PyList_SetSlice(self *PyObject, low, high int, itemlist *PyObject) error {
 	err := C.PyList_SetSlice(topy(self), C.Py_ssize_t(low), C.Py_ssize_t(high),
 		topy(itemlist))
 	return int2err(err)
@@ -344,14 +343,14 @@ func PyList_SetSlice(self *PyObject, low, high int, itemlist *PyObject) os.Error
 
 // int PyList_Sort(PyObject *list)
 // Sort the items of list in place. Return 0 on success, -1 on failure. This is equivalent to list.sort().
-func PyList_Sort(self *PyObject) os.Error {
+func PyList_Sort(self *PyObject) error {
 	err := C.PyList_Sort(topy(self))
 	return int2err(err)
 }
 
 // int PyList_Reverse(PyObject *list)
 // Reverse the items of list in place. Return 0 on success, -1 on failure. This is the equivalent of list.reverse().
-func PyList_Reverse(self *PyObject) os.Error {
+func PyList_Reverse(self *PyObject) error {
 	err := C.PyList_Reverse(topy(self))
 	return int2err(err)
 }
@@ -665,7 +664,7 @@ func PyObject_CheckBuffer(self *PyObject) bool {
 // PyBUF_FULL_RO	This is equivalent to (PyBUF_INDIRECT | PyBUF_FORMAT).
 // PyBUF_CONTIG	This is equivalent to (PyBUF_ND | PyBUF_WRITABLE).
 // PyBUF_CONTIG_RO	This is equivalent to (PyBUF_ND).
-func PyObject_GetBuffer(self *PyObject, flags PyBUF_Flag) (buf *Py_buffer, err os.Error) {
+func PyObject_GetBuffer(self *PyObject, flags PyBUF_Flag) (buf *Py_buffer, err error) {
 	buf.ptr = &C.Py_buffer{}
 	err = int2err(C.PyObject_GetBuffer(topy(self), buf.ptr, C.int(flags)))
 	return
@@ -686,7 +685,7 @@ func PyBuffer_SizeFromFormat(self *Py_buffer) int {
 
 // int PyObject_CopyToObject(PyObject *obj, void *buf, Py_ssize_t len, char fortran)
 // Copy len bytes of data pointed to by the contiguous chunk of memory pointed to by buf into the buffer exported by obj. The buffer must of course be writable. Return 0 on success and return -1 and raise an error on failure. If the object does not have a writable buffer, then an error is raised. If fortran is 'F', then if the object is multi-dimensional, then the data will be copied into the array in Fortran-style (first dimension varies the fastest). If fortran is 'C', then the data will be copied into the array in C-style (last dimension varies the fastest). If fortran is 'A', then it does not matter and the copy will be made in whatever way is more efficient.
-func PyObject_CopyToObject(self *PyObject, buf []byte, fortran string) os.Error {
+func PyObject_CopyToObject(self *PyObject, buf []byte, fortran string) error {
 	/*
 		c_buf := (*C.char)(unsafe.Pointer(&buf[0]))
 		c_for := C.char(fortran[0])
@@ -715,7 +714,7 @@ func PyBuffer_FillContiguousStrides(ndim int, shape, strides []int, itemsize int
 
 // int PyBuffer_FillInfo(Py_buffer *view, PyObject *obj, void *buf, Py_ssize_t len, int readonly, int infoflags)
 // Fill in a buffer-info structure, view, correctly for an exporter that can only share a contiguous chunk of memory of “unsigned bytes” of the given length. Return 0 on success and -1 (with raising an error) on error.
-func PyBuffer_FillInfo(self *PyObject, buf []byte, readonly bool, infoflags int) (buffer *Py_buffer, err os.Error) {
+func PyBuffer_FillInfo(self *PyObject, buf []byte, readonly bool, infoflags int) (buffer *Py_buffer, err error) {
 	//FIXME
 	panic("not implemented")
 }

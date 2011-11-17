@@ -22,8 +22,11 @@ package python
 
 */
 import "C"
-import "unsafe"
-import "os"
+import (
+	"errors"
+	"unsafe"
+)
+
 import "fmt"
 
 ////// Operating System Utilities //////
@@ -85,7 +88,7 @@ func PySys_GetFile(name string, def *C.FILE) *C.FILE {
 
 // int PySys_SetObject(char *name, PyObject *v)
 // Set name in the sys module to v unless v is NULL, in which case name is deleted from the sys module. Returns 0 on success, -1 on error.
-func PySys_SetObject(name string, v *PyObject) os.Error {
+func PySys_SetObject(name string, v *PyObject) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 	return int2err(C.PySys_SetObject(c_name, topy(v)))
@@ -159,12 +162,12 @@ var atexit_funcs []func()
 
 // int Py_AtExit(void (*func) ())
 // Register a cleanup function to be called by Py_Finalize(). The cleanup function will be called with no arguments and should return no value. At most 32 cleanup functions can be registered. When the registration is successful, Py_AtExit() returns 0; on failure, it returns -1. The cleanup function registered last is called first. Each cleanup function will be called at most once. Since Python’s internal finalization will have completed before the cleanup function, no Python APIs should be called by func.
-func Py_AtExit(fct func()) os.Error {
+func Py_AtExit(fct func()) error {
 	atexit_funcs = append(atexit_funcs, fct)
 	//c_fct := 
 	// FIXME
 	panic("not implemented")
-	return os.NewError("C<->go callbacks are hard")
+	return errors.New("C<->go callbacks are hard")
 }
 
 ///// import /////
@@ -194,7 +197,6 @@ func PyImport_ImportModuleNoBlock(name string) *PyObject {
 	return togo(C.PyImport_ImportModuleNoBlock(c_name))
 }
 
-
 // PyObject* PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist)
 // Return value: New reference.
 // Import a module. This is best described by referring to the built-in Python function __import__(), as the standard __import__() function calls this function directly.
@@ -210,7 +212,6 @@ func PyImport_ImportModuleEx(name string, globals, locals, fromlist *PyObject) *
 
 	return togo(C._gopy_PyImport_ImportModuleEx(c_name, topy(globals), topy(locals), topy(fromlist)))
 }
-
 
 // PyObject* PyImport_ImportModuleLevel(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist, int level)
 // Return value: New reference.
@@ -285,7 +286,6 @@ func PyImport_ExecCodeModuleEx(name string, co *PyObject, pathname string) *PyOb
 	return togo(C.PyImport_ExecCodeModuleEx(c_name, topy(co), c_pname))
 }
 
-
 // long PyImport_GetMagicNumber()
 // Return the magic number for Python bytecode files (a.k.a. .pyc and .pyo files). The magic number should be present in the first four bytes of the bytecode file, in little-endian byte order.
 func PyImport_GetMagicNumber() int64 {
@@ -322,7 +322,7 @@ For internal use only.
 
 // int PyImport_ImportFrozenModule(char *name)
 // Load a frozen module named name. Return 1 for success, 0 if the module is not found, and -1 with an exception set if the initialization failed. To access the imported module on a successful load, use PyImport_ImportModule(). (Note the misnomer — this function would reload the module if it was already imported.)
-func PyImport_ImportFrozenModule(name string) os.Error {
+func PyImport_ImportFrozenModule(name string) error {
 	c_name := C.CString(name)
 	defer C.free(unsafe.Pointer(c_name))
 
@@ -402,7 +402,6 @@ func PyMarshal_ReadShortFromFile(file *C.FILE) int {
 	//FIXME: use os.File instead ?
 	return int(C.PyMarshal_ReadShortFromFile(file))
 }
-
 
 // PyObject* PyMarshal_ReadObjectFromFile(FILE *file)
 // Return value: New reference.
