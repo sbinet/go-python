@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-include $(GOROOT)/src/Make.inc
-
 TARG=bitbucket.org/binet/go-python/pkg/python
 
 PYTHON:=python2
@@ -11,27 +9,18 @@ PYTHON_VERSION:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write
 PYTHON_CFLAGS :=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(''.join(distutils.sysconfig.get_config_vars('CFLAGS'))+'\n')"`
 PYTHON_CPPFLAGS:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(distutils.sysconfig.get_python_inc()+'\n')"`
 PYTHON_LDFLAGS:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write('-L'+distutils.sysconfig.get_python_lib(0,1)+' -lpython')"`$(PYTHON_VERSION)
-CGO_LDFLAGS=$(PYTHON_LDFLAGS)
+CGO_LDFLAGS:=$(PYTHON_LDFLAGS)
 CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)
 
-CGOFILES=\
-	veryhigh.go\
-	exceptions.go\
-	utilities.go\
-	object.go\
-	type.go\
-	none.go\
-	numeric.go\
-	sequence.go\
-	dict.go\
-	otherobjects.go\
-	python.go
+build:
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go build .
 
+install:
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go install .
 
-#CLEANFILES+=python_test
+test:
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go test .
 
-include $(GOROOT)/src/Make.pkg
+all: install
 
-%: install %.go
-	$(GC) $*.go
-	$(LD) -o $@ $*.$O
+PHONY: build install

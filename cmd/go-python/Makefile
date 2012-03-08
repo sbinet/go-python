@@ -2,10 +2,15 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-include ${GOROOT}/src/Make.inc
-
 TARG=go-python
 GOFILES=\
 	main.go
 
-include ${GOROOT}/src/Make.cmd
+build:
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go build .
+
+install:
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go install .
+
+all: install
+

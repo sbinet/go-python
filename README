@@ -19,7 +19,14 @@ the rational being that under such an executable, ``go`` based extensions for C-
 Install:
 --------
 
- $ goinstall bitbucket.org/binet/go-python/pkg/python
+With `Go 1` and the `go` tool, `cgo` packages can't pass anymore additional `CGO_CFLAGS` from external programs (except `pkg-config`) to the "fake" `#cgo` preprocessor directive.
+So one has to do instead:
+
+ $ mkdir -p $GOPATH/pkg/bitbucket.org/binet
+ $ cd $GOPATH/pkg/bitbucket.org/binet
+ $ hg clone http://bitbucket.org/binet/go-python
+ $ cd go-python && make
+
 
 
 Example:
