@@ -12,14 +12,20 @@ PYTHON_LDFLAGS:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write
 CGO_LDFLAGS:=$(PYTHON_LDFLAGS)
 CGO_CFLAGS:=-I$(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)
 
+GO_COMPILER:=$(GC)
+ifeq ($(GO_COMPILER),)
+	GO_COMPILER:="gc"
+endif
+
+
 build:
-	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go build .
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go build -compiler=$(GO_COMPILER) .
 
 install:
-	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go install .
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go install -compiler=$(GO_COMPILER) .
 
 test:
-	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go test .
+	CGO_LDFLAGS="$(CGO_LDFLAGS)" CGO_CFLAGS="$(CGO_CFLAGS)" go test -compiler=$(GO_COMPILER) .
 
 all: install
 
