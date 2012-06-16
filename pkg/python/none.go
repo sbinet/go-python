@@ -3,7 +3,7 @@ package python
 //#include "Python.h"
 //#include <stdlib.h>
 //#include <string.h>
-//PyObject *_gopy_pynone() { return Py_None; }
+//PyObject *_gopy_pynone(void) { return Py_None; }
 import "C"
 
 // The Python None object, denoting lack of value. This object has no methods.
