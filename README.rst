@@ -19,14 +19,21 @@ the rational being that under such an executable, ``go`` based extensions for C-
 Install:
 --------
 
-With `Go 1` and the `go` tool, `cgo` packages can't pass anymore additional `CGO_CFLAGS` from external programs (except `pkg-config`) to the "fake" `#cgo` preprocessor directive.
+With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
 So one has to do instead::
 
  $ mkdir -p $GOPATH/pkg/github.com/sbinet
  $ cd $GOPATH/pkg/github.com/sbinet
- $ hg clone http://github.com/sbinet/go-python
+ $ git clone http://github.com/sbinet/go-python
  $ cd go-python && make
 
+
+Documentation
+-------------
+
+Is available on ``gopkgdoc``:
+
+ http://go.pkgdoc.org/github.com/sbinet/go-python/pkg/python
 
 
 Example:
