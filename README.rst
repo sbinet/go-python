@@ -20,7 +20,7 @@ Install:
 --------
 
 With `Go 1` and the `go` tool, `cgo` packages can't pass anymore additional `CGO_CFLAGS` from external programs (except `pkg-config`) to the "fake" `#cgo` preprocessor directive.
-So one has to do instead:
+So one has to do instead::
 
  $ mkdir -p $GOPATH/pkg/github.com/sbinet
  $ cd $GOPATH/pkg/github.com/sbinet
@@ -31,6 +31,8 @@ So one has to do instead:
 
 Example:
 --------
+
+::
 
  $ cat main.go
  package main
@@ -45,8 +47,10 @@ Example:
 	 fmt.Println("hello [", str, "]")
  }
 
-$ gorun ./main.go
-hello [ foo ]
+::
+
+  $ gorun ./main.go
+  hello [ foo ]
 
 
 TODO:
