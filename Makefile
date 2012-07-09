@@ -12,4 +12,4 @@ DIRS=\
         cmd/go-python\
 
 install:
-	(cd pkg/python && make) && (cd cmd/go-python && make)
+	(cd pkg/python && make install) && (cd cmd/go-python && make install)
