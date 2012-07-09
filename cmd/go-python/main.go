@@ -2,7 +2,7 @@
 package main
 
 import "os"
-import "bitbucket.org/binet/go-python/pkg/python"
+import "github.com/sbinet/go-python/pkg/python"
 
 func main() {
 	rc := python.Py_Main(os.Args)

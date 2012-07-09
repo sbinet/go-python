@@ -22,9 +22,9 @@ Install:
 With `Go 1` and the `go` tool, `cgo` packages can't pass anymore additional `CGO_CFLAGS` from external programs (except `pkg-config`) to the "fake" `#cgo` preprocessor directive.
 So one has to do instead:
 
- $ mkdir -p $GOPATH/pkg/bitbucket.org/binet
- $ cd $GOPATH/pkg/bitbucket.org/binet
- $ hg clone http://bitbucket.org/binet/go-python
+ $ mkdir -p $GOPATH/pkg/github.com/sbinet
+ $ cd $GOPATH/pkg/github.com/sbinet
+ $ hg clone http://github.com/sbinet/go-python
  $ cd go-python && make
 
 
@@ -36,7 +36,7 @@ Example:
  package main
  
  import "fmt"
- import "bitbucket.org/binet/go-python/pkg/python"
+ import "github.com/sbinet/go-python/pkg/python"
 
  func main() {
   	 gostr := "foo" 
