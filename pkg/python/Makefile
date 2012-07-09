@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-TARG=bitbucket.org/binet/go-python/pkg/python
+TARG=github.com/sbinet/go-python/pkg/python
 
 PYTHON:=python2
 PYTHON_VERSION:=`$(PYTHON) -c "import distutils.sysconfig, sys; sys.stdout.write(''.join(distutils.sysconfig.get_config_vars('VERSION'))+'\n')"`
