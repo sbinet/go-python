@@ -4,8 +4,7 @@ before_install:
    - sudo apt-get update -qq
    - sudo apt-get install python-dev -qq
 
-install: cd pkg/python && make
-script: go test ./pkg/...
+install: cd pkg/python && make build
 
 notifications:
   email:
