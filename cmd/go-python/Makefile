@@ -23,11 +23,10 @@ TARG=go-python
 GOFILES=\
 	main.go
 
+all: install
+
 build:
 	CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go build -compiler=$(GO_COMPILER) .
 
 install:
 	CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go install -compiler=$(GO_COMPILER) .
-
-all: install
-
