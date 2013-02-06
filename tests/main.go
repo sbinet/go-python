@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
-import "github.com/sbinet/go-python/pkg/python"
+import (
+	"fmt"
+	"github.com/sbinet/go-python/pkg/python"
+)
+
+func init() {
+	err := python.Initialize()
+	if err != nil {
+		panic(err.Error())
+	}
+}
 
 func main() {
 	gostr := "foo"
