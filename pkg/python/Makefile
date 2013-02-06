@@ -21,6 +21,7 @@ ifeq ($(GO_COMPILER),)
 	GO_COMPILER:="gc"
 endif
 
+all: install
 
 build:
 	CGO_LDFLAGS=$(PY_CGO_LDFLAGS) CGO_CFLAGS=$(PY_CGO_CFLAGS) go build -compiler=$(GO_COMPILER) .
@@ -30,7 +31,5 @@ install:
 
 test:
 	CGO_LDFLAGS=$(PY_CGO_LDFLAGS) CGO_CFLAGS=$(PY_CGO_CFLAGS) go test -compiler=$(GO_COMPILER) .
-
-all: install
 
 PHONY: build install
