@@ -22,9 +22,9 @@ install_cwd = CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go install -co
 all: install
 
 install:
-	(cd pkg/python && $(install_cwd))
+	$(install_cwd)
 	(cd cmd/go-python && $(install_cwd))
 
 build:
-	(cd pkg/python && $(build_cwd))
+	$(build_cwd)
 	(cd cmd/go-python && $(build_cwd))
