@@ -4,7 +4,11 @@ before_install:
    - sudo apt-get update -qq
    - sudo apt-get install python-dev -qq
 
-install: make build
+install:
+  - mkdir -p $GOPATH/src/github.com/sbinet/go-python
+  - mv * $GOPATH/src/github.com/sbinet/go-python
+  - pushd $GOPATH/src/github.com/sbinet/go-python
+  - make
 
 notifications:
   email:
