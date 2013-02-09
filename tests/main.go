@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/sbinet/go-python/pkg/python"
+	"github.com/sbinet/go-python"
 )
 
 func init() {
