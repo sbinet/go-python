@@ -2,7 +2,7 @@
 package main
 
 import (
-	"github.com/sbinet/go-python/pkg/python"
+	"github.com/sbinet/go-python"
 	"os"
 )
 
