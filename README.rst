@@ -22,8 +22,8 @@ Install:
 With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
 So one has to do instead::
 
- $ mkdir -p $GOPATH/pkg/github.com/sbinet
- $ cd $GOPATH/pkg/github.com/sbinet
+ $ mkdir -p $GOPATH/src/github.com/sbinet
+ $ cd $GOPATH/src/github.com/sbinet
  $ git clone http://github.com/sbinet/go-python
  $ cd go-python && make
 
@@ -33,7 +33,7 @@ Documentation
 
 Is available on ``gopkgdoc``:
 
- http://go.pkgdoc.org/github.com/sbinet/go-python/pkg/python
+ http://godoc.org/github.com/sbinet/go-python
 
 
 Example:
@@ -45,7 +45,14 @@ Example:
  package main
  
  import "fmt"
- import "github.com/sbinet/go-python/pkg/python"
+ import "github.com/sbinet/go-python"
+
+ func init() {
+    err := python.Initialize()
+    if err != nil {
+           panic(err.Error())
+    } 
+ }
 
  func main() {
   	 gostr := "foo" 
