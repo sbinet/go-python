@@ -20,18 +20,19 @@ Install:
 --------
 
 With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
-So one has to do instead::
+So one has to do instead:
 
+```sh
  $ mkdir -p $GOPATH/src/github.com/sbinet
  $ cd $GOPATH/src/github.com/sbinet
  $ git clone http://github.com/sbinet/go-python
  $ cd go-python && make
-
+```
 
 Documentation
 -------------
 
-Is available on ``gopkgdoc``:
+Is available on ``godoc``:
 
  http://godoc.org/github.com/sbinet/go-python
 
@@ -39,33 +40,31 @@ Is available on ``gopkgdoc``:
 Example:
 --------
 
-::
+```go
+package main
 
- $ cat main.go
- package main
- 
- import "fmt"
- import "github.com/sbinet/go-python"
+import "fmt"
+import "github.com/sbinet/go-python"
 
- func init() {
-    err := python.Initialize()
-    if err != nil {
-           panic(err.Error())
-    } 
- }
+func init() {
+   err := python.Initialize()
+   if err != nil {
+          panic(err.Error())
+   } 
+}
 
- func main() {
-  	 gostr := "foo" 
+func main() {
+ 	 gostr := "foo" 
 	 pystr := python.PyString_FromString(gostr)
 	 str := python.PyString_AsString(pystr)
 	 fmt.Println("hello [", str, "]")
- }
+}
+```
 
-::
-
-  $ go run ./main.go
-  hello [ foo ]
-
+```sh
+$ go run ./main.go
+hello [ foo ]
+```
 
 TODO:
 -----
