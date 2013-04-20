@@ -63,7 +63,7 @@ Example:
 
 ::
 
-  $ gorun ./main.go
+  $ go run ./main.go
   hello [ foo ]
 
 
