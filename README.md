@@ -16,8 +16,7 @@ this package also provides an executable "go-python" which just loads "python" a
 the rational being that under such an executable, ``go`` based extensions for C-Python would be easier to implement (as this usually means calling into ``go`` from ``C`` through some rather convoluted functions hops)
 
 
-Install:
---------
+## Install
 
 With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
 So one has to do instead:
@@ -28,6 +27,8 @@ So one has to do instead:
  $ git clone http://github.com/sbinet/go-python
  $ cd go-python && make
 ```
+
+*Note*: you'll need the proper header and `python` development environment. On Debian, you'll need to install the ``python-all-dev`` package
 
 Documentation
 -------------
