@@ -28,6 +28,14 @@ So one has to do instead:
  $ cd go-python && make
 ```
 
+or (if you are into one-liners):
+
+```sh
+$ CGO_CFLAGS="-I/usr/include/python2.7" \
+  CGO_LDFLAGS="-lpython2.7 -L/usr/lib" \
+  go get github.com/sbinet/go-python
+```
+
 *Note*: you'll need the proper header and `python` development environment. On Debian, you'll need to install the ``python-all-dev`` package
 
 Documentation
