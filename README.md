@@ -21,11 +21,17 @@ the rational being that under such an executable, ``go`` based extensions for C-
 With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
 So one has to do instead:
 
+```
+$ CGO_CFLAGS="-I/usr/include/python2.7" CGO_LDFLAGS="-lpython2.7 -L/usr/lib" go get github.com/sbinet/go-python
+```
+
+or 
+
 ```sh
- $ mkdir -p $GOPATH/src/github.com/sbinet
- $ cd $GOPATH/src/github.com/sbinet
- $ git clone http://github.com/sbinet/go-python
- $ cd go-python && make
+$ mkdir -p $GOPATH/src/github.com/sbinet
+$ cd $GOPATH/src/github.com/sbinet
+$ git clone http://github.com/sbinet/go-python
+$ cd go-python && make
 ```
 
 or (if you are into one-liners):
@@ -89,3 +95,4 @@ TODO:
  - think about the need (or not) to translate CPython exceptions into go panic/recover mechanism
 
  - use SWIG to automatically wrap the whole CPython api ?
+
