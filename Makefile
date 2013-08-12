@@ -23,8 +23,8 @@ all: install
 
 install:
 	$(install_cwd)
-	(cd cmd/go-python && $(install_cwd))
+	(cd ./cmd/go-python && $(install_cwd))
 
 build:
 	$(build_cwd)
-	(cd cmd/go-python && $(build_cwd))
+	(cd ./cmd/go-python && $(build_cwd))
