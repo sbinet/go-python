@@ -25,7 +25,7 @@ So one has to do instead:
  $ mkdir -p $GOPATH/src/github.com/sbinet
  $ cd $GOPATH/src/github.com/sbinet
  $ git clone http://github.com/sbinet/go-python
- $ cd go-python && make
+ $ cd go-python && make VERBOSE=1
 ```
 
 or (if you are into one-liners):
