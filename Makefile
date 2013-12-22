@@ -2,10 +2,13 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-PYTHON := python2
-PYTHON_CFLAGS   := $(shell $(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_config_var('CFLAGS'))")
-PYTHON_CPPFLAGS := $(shell $(PYTHON) -c "from distutils import sysconfig; print(sysconfig.get_python_inc())")
-PYTHON_LDFLAGS  := $(shell $(PYTHON) -c "from distutils import sysconfig; print('-L' + sysconfig.get_python_lib(0,1) + ' -lpython' + sysconfig.get_python_version())")
+PYTHON_CONFIG := $(PYTHON_CONFIG)
+ifeq ($(PYTHON_CONFIG),)
+	PYTHON_CONFIG:="python-config"
+endif
+
+PYTHON_CFLAGS := $(shell $(PYTHON_CONFIG) --cflags)
+PYTHON_LDFLAGS := $(shell $(PYTHON_CONFIG) --ldflags)
 
 CGO_LDFLAGS := "$(PYTHON_LDFLAGS)"
 CGO_CFLAGS  := "-I$(PYTHON_CPPFLAGS) $(PYTHON_CFLAGS)"
@@ -16,8 +19,13 @@ ifeq ($(GO_COMPILER),)
 	GO_COMPILER:="gc"
 endif
 
-build_cwd = CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go build -compiler=$(GO_COMPILER) .
-install_cwd = CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go install -compiler=$(GO_COMPILER) .
+GO_VERBOSE := $(VERBOSE)
+ifneq ($(GO_VERBOSE),)
+	GO_VERBOSE:= -v -x
+endif
+
+build_cwd = CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go build $(GO_VERBOSE) -compiler=$(GO_COMPILER) .
+install_cwd = CGO_LDFLAGS=$(CGO_LDFLAGS) CGO_CFLAGS=$(CGO_CFLAGS) go install $(GO_VERBOSE) -compiler=$(GO_COMPILER) .
 
 all: install
 
