@@ -18,22 +18,26 @@ the rational being that under such an executable, ``go`` based extensions for C-
 
 ## Install
 
-With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore additional ``CGO_CFLAGS`` from external programs (except `pkg-config`) to the "fake" ``#cgo`` preprocessor directive.
-So one has to do instead:
+With `Go 1` and the ``go`` tool, ``cgo`` packages can't pass anymore
+additional ``CGO_CFLAGS`` from external programs (except `pkg-config`)
+to the "fake" ``#cgo`` preprocessor directive.
+
+``go-python`` now uses ``pkg-config`` to get the correct location of
+headers and libraries.
+Unfortunately, the naming convention for the ``pkg-config`` package is
+not standardised across distributions and OSes, so you may have to
+edit the ``cgoflags.go`` file accordingly.
 
 ```sh
- $ mkdir -p $GOPATH/src/github.com/sbinet
- $ cd $GOPATH/src/github.com/sbinet
- $ git clone http://github.com/sbinet/go-python
- $ cd go-python && make VERBOSE=1
+ $ go get github.com/sbinet/go-python
 ```
 
-or (if you are into one-liners):
+If ``go get`` + ``pkg-config`` failed:
 
 ```sh
-$ CGO_CFLAGS="-I/usr/include/python2.7" \
-  CGO_LDFLAGS="-lpython2.7 -L/usr/lib" \
-  go get github.com/sbinet/go-python
+ $ cd go-python
+ $ edit cgoflags.go
+ $ make VERBOSE=1
 ```
 
 *Note*: you'll need the proper header and `python` development environment. On Debian, you'll need to install the ``python-all-dev`` package
