@@ -19,12 +19,9 @@ func Py_Main(args []string) int {
 	var argv []*C.char = make([]*C.char, argc)
 	for idx, arg := range args {
 		argv[idx] = C.CString(arg)
+		// no need to free. Py_Main takes owner ship.
+		//defer C.free(unsafe.Pointer(argv[idx]))
 	}
-	defer func() {
-		for idx, _ := range argv {
-			C.free(unsafe.Pointer(argv[idx]))
-		}
-	}()
 	return int(C.Py_Main(argc, &argv[0]))
 }
 
