@@ -5,10 +5,7 @@ before_install:
    - sudo apt-get install python-dev -qq
 
 install:
-  - mkdir -p $GOPATH/src/github.com/sbinet/go-python
-  - mv * $GOPATH/src/github.com/sbinet/go-python
-  - pushd $GOPATH/src/github.com/sbinet/go-python
-  - make
+  - go get -x -v github.com/sbinet/go-python
 
 notifications:
   email:
