@@ -25,6 +25,9 @@ func topy(self *PyObject) *C.PyObject {
 	return self.ptr
 }
 func togo(obj *C.PyObject) *PyObject {
+	if obj == nil {
+		return nil
+	}
 	return &PyObject{ptr: obj}
 }
 
