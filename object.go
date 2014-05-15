@@ -90,6 +90,36 @@ func file2go(f *C.FILE) *os.File {
 	return nil
 }
 
+// void Py_IncRef(PyObject *o)
+// Increment the reference count for object o. The object may be
+// NULL, in which case the function has no effect.
+func (self *PyObject) IncRef() {
+	C.Py_IncRef(self.ptr)
+}
+
+// void Py_DecRef(PyObject *o)
+// Decrement the reference count for object o. If the object is
+// NULL, nothing happens. If the reference count reaches zero, the
+// object’s type’s deallocation function (which must not be NULL) is
+// invoked.
+// WARNING: The deallocation function can cause arbitrary Python
+// code to be invoked. See the warnings and instructions in the
+// Python docs, and consider using Clear instead.
+func (self *PyObject) DecRef() {
+	C.Py_DecRef(self.ptr)
+}
+
+// void Py_CLEAR(PyObject *o)
+// Clear sets the PyObject's internal pointer to nil
+// before calling Py_DecRef. This avoids the potential issues with
+// Python code called by the deallocator referencing invalid,
+// partially-deallocated data.
+func (self *PyObject) Clear() {
+	tmp := self.ptr
+	self.ptr = nil
+	C.Py_DecRef(tmp)
+}
+
 // int PyObject_HasAttr(PyObject *o, PyObject *attr_name)
 // Returns 1 if o has the attribute attr_name, and 0 otherwise. This is equivalent to the Python expression hasattr(o, attr_name). This function always succeeds.
 func (self *PyObject) HasAttr(attr_name *PyObject) int {
