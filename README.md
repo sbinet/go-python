@@ -1,7 +1,9 @@
 go-python
 =========
 
-Naive 'go' bindings towards the C-API of CPython
+[![Build Status](https://drone.io/github.com/sbinet/go-python/status.png)](https://drone.io/github.com/sbinet/go-python/latest)
+
+Naive `go` bindings towards the C-API of CPython-2.
 
 this package provides a ``go`` package named "python" under which most of the ``PyXYZ`` functions and macros of the public C-API of CPython have been exposed.
 
