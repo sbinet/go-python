@@ -372,6 +372,7 @@ type PyString PyObject
 func PyString_Check(self *PyObject) bool {
 	return int2bool(C._gopy_PyString_Check(self.ptr))
 }
+
 // func (self *PyString) Check() int {
 // 	return int(C.PyString_Check(self.topy()))
 // }

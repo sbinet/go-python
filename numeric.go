@@ -38,16 +38,16 @@ func PyInt_CheckExact(self *PyObject) bool {
 // PyObject* PyInt_FromString(char *str, char **pend, int base)
 // Return value: New reference.
 // Return a new PyIntObject or PyLongObject based on the string value in str,
-// which is interpreted according to the radix in base. If pend is non-NULL, 
-// *pend will point to the first character in str which follows the 
+// which is interpreted according to the radix in base. If pend is non-NULL,
+// *pend will point to the first character in str which follows the
 // representation of the number. If base is 0, the radix will be determined
-// based on the leading characters of str: if str starts with '0x' or '0X', 
+// based on the leading characters of str: if str starts with '0x' or '0X',
 // radix 16 will be used; if str starts with '0', radix 8 will be used; otherwise
-// radix 10 will be used. If base is not 0, it must be between 2 and 36, 
+// radix 10 will be used. If base is not 0, it must be between 2 and 36,
 // inclusive. Leading spaces are ignored. If there are no digits, ValueError will
 //  be raised. If the string represents a number too large to be contained within
-//  the machine’s long int type and overflow warnings are being suppressed, a 
-// PyLongObject will be returned. If overflow warnings are not being suppressed, 
+//  the machine’s long int type and overflow warnings are being suppressed, a
+// PyLongObject will be returned. If overflow warnings are not being suppressed,
 // NULL will be returned in this case.
 func PyInt_FromString(str string, pend, base int) *PyObject {
 	c_str := C.CString(str)
@@ -298,7 +298,6 @@ func PyLong_AsUnsignedLongLong(self *PyObject) uint64 {
 	return uint64(C.PyLong_AsUnsignedLongLong(topy(self)))
 }
 
-
 // unsigned long PyLong_AsUnsignedLongMask(PyObject *io)
 // Return a C unsigned long from a Python long integer, without checking for overflow.
 //
@@ -306,7 +305,6 @@ func PyLong_AsUnsignedLongLong(self *PyObject) uint64 {
 func PyLong_AsUnsignedLongMask(self *PyObject) uint64 {
 	return uint64(C.PyLong_AsUnsignedLongMask(topy(self)))
 }
-
 
 // unsigned PY_LONG_LONG PyLong_AsUnsignedLongLongMask(PyObject *io)
 // Return a C unsigned long long from a Python long integer, without checking for overflow.
@@ -316,13 +314,11 @@ func PyLong_AsUnsignedLongLongMask(self *PyObject) uint64 {
 	return uint64(C.PyLong_AsUnsignedLongLongMask(topy(self)))
 }
 
-
 // double PyLong_AsDouble(PyObject *pylong)
 // Return a C double representation of the contents of pylong. If pylong cannot be approximately represented as a double, an OverflowError exception is raised and -1.0 will be returned.
 func PyLong_AsDouble(self *PyObject) float64 {
 	return float64(C.PyLong_AsDouble(topy(self)))
 }
-
 
 // void* PyLong_AsVoidPtr(PyObject *pylong)
 // Convert a Python integer or long integer pylong to a C void pointer. If pylong cannot be converted, an OverflowError will be raised. This is only assured to produce a usable void pointer for values created with PyLong_FromVoidPtr().
@@ -345,15 +341,14 @@ func PyBool_Check(self *PyObject) bool {
 	return int2bool(C._gopy_PyBool_Check(topy(self)))
 }
 
-
-// The Python False object. This object has no methods. 
-// It needs to be treated just like any other object with respect to 
+// The Python False object. This object has no methods.
+// It needs to be treated just like any other object with respect to
 // reference counts.
 var Py_False = togo(C._gopy_pyfalse())
 
 // PyObject* Py_True
-// The Python True object. This object has no methods. 
-// It needs to be treated just like any other object with respect to 
+// The Python True object. This object has no methods.
+// It needs to be treated just like any other object with respect to
 // reference counts.
 var Py_True = togo(C._gopy_pytrue())
 
@@ -476,7 +471,6 @@ func PyFloat_AsReprString(buf []byte, v *C.PyFloatObject) {
 	panic("not implemented")
 }
 
-
 /////////// complex ///////////
 
 // int PyComplex_Check(PyObject *p)
@@ -530,6 +524,5 @@ func PyComplex_AsCComplex(op *PyObject) C.Py_complex {
 	// FIXME ? use go-complex ?
 	return C.PyComplex_AsCComplex(topy(op))
 }
-
 
 // EOF

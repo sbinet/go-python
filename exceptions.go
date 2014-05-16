@@ -14,7 +14,7 @@ PyObject* PyErr_SetExcFromWindowsErrWithFilename(PyObject *type, int ierr, char 
 
 # endif
 
-int _gopy_PyErr_WarnPy3k(char *message, int stacklevel) 
+int _gopy_PyErr_WarnPy3k(char *message, int stacklevel)
 { return PyErr_WarnPy3k(message, stacklevel);}
 
 */

@@ -164,7 +164,7 @@ var atexit_funcs []func()
 // Register a cleanup function to be called by Py_Finalize(). The cleanup function will be called with no arguments and should return no value. At most 32 cleanup functions can be registered. When the registration is successful, Py_AtExit() returns 0; on failure, it returns -1. The cleanup function registered last is called first. Each cleanup function will be called at most once. Since Python’s internal finalization will have completed before the cleanup function, no Python APIs should be called by func.
 func Py_AtExit(fct func()) error {
 	atexit_funcs = append(atexit_funcs, fct)
-	//c_fct := 
+	//c_fct :=
 	// FIXME
 	panic("not implemented")
 	return errors.New("C<->go callbacks are hard")
