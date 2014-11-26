@@ -91,8 +91,14 @@ func int2err(i C.int) error {
 	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%i)", int(i))}
 }
 
-func file2py(f *os.File) *C.FILE {
-	return nil
+// file2py opens a stdC file from a Go os.File.  Note the returned file has
+// been newly opened: the caller must close it with C.fclose(retval).
+func file2py(f *os.File, mode string) *C.FILE {
+	cmode := C.CString(mode)
+	defer C.free(unsafe.Pointer(cmode))
+	fd := f.Fd()
+	file := C.fdopen(C.int(fd), cmode)
+	return file
 }
 
 func file2go(f *C.FILE) *os.File {
