@@ -31,6 +31,11 @@ func togo(obj *C.PyObject) *PyObject {
 	return &PyObject{ptr: obj}
 }
 
+// PyObject_FromVoidPtr converts a PyObject from an unsafe.Pointer
+func PyObject_FromVoidPtr(ptr unsafe.Pointer) *PyObject {
+	return togo((*C.PyObject)(ptr))
+}
+
 func int2bool(i C.int) bool {
 	switch i {
 	case -1:
