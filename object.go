@@ -8,6 +8,7 @@ package python
 //int _gopy_PyObject_DelAttrString(PyObject *o, const char *attr_name)
 //{return PyObject_DelAttrString(o,attr_name);}
 import "C"
+
 import "unsafe"
 import "os"
 import "fmt"
@@ -24,6 +25,7 @@ func (self *PyObject) topy() *C.PyObject {
 func topy(self *PyObject) *C.PyObject {
 	return self.ptr
 }
+
 func togo(obj *C.PyObject) *PyObject {
 	if obj == nil {
 		return nil
