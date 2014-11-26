@@ -15,7 +15,7 @@ ifneq ($(GO_VERBOSE),)
 	GO_VERBOSE:= -v -x
 endif
 
-install_cwd = go install $(GO_VERBOSE) -compiler=$(GO_COMPILER) .
+install_cwd = go get $(GO_VERBOSE) -compiler=$(GO_COMPILER) .
 test_cwd = go test $(GO_VERBOSE) -compiler=$(GO_COMPILER) .
 
 all: install test
