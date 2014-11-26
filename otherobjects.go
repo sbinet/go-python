@@ -37,7 +37,10 @@ int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
 
 */
 import "C"
-import "unsafe"
+
+import (
+	"unsafe"
+)
 
 ///// module /////
 

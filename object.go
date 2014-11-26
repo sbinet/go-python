@@ -9,9 +9,11 @@ package python
 //{return PyObject_DelAttrString(o,attr_name);}
 import "C"
 
-import "unsafe"
-import "os"
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"unsafe"
+)
 
 // PyObject layer
 type PyObject struct {

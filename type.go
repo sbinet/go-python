@@ -7,8 +7,6 @@ package python
 //int _gopy_PyType_CheckExact(PyObject *o) { return PyType_CheckExact(o); }
 import "C"
 
-//import "unsafe"
-
 type PyTypeObject struct {
 	ptr *C.PyTypeObject
 }

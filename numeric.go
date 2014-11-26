@@ -17,7 +17,10 @@ package python
 //int _gopy_PyComplex_Check(PyObject *o) { return PyComplex_Check(o); }
 //int _gopy_PyComplex_CheckExact(PyObject *o) { return PyComplex_CheckExact(o); }
 import "C"
-import "unsafe"
+
+import (
+	"unsafe"
+)
 
 // int PyInt_Check(PyObject *o)
 // Return true if o is of type PyInt_Type or a subtype of PyInt_Type.

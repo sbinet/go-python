@@ -6,6 +6,7 @@ package python
 //int _gopy_PyDict_Check(PyObject *o) { return PyDict_Check(o); }
 //int _gopy_PyDict_CheckExact(PyObject *o) { return PyDict_CheckExact(o); }
 import "C"
+
 import (
 	"errors"
 	"unsafe"

@@ -19,9 +19,10 @@ int _gopy_PyErr_WarnPy3k(char *message, int stacklevel)
 
 */
 import "C"
-import "unsafe"
 
-//import "fmt"
+import (
+	"unsafe"
+)
 
 // void PyErr_PrintEx(int set_sys_last_vars)
 // Print a standard traceback to sys.stderr and clear the error indicator. Call this function only when the error indicator is set. (Otherwise it will cause a fatal error!)

@@ -35,7 +35,10 @@ int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj)
 
 */
 import "C"
-import "unsafe"
+
+import (
+	"unsafe"
+)
 
 //////// bytearray ////////
 

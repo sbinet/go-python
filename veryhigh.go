@@ -6,7 +6,10 @@ package python
 //int _gopy_PyRun_SimpleString(const char *command)
 //{return PyRun_SimpleString(command);}
 import "C"
-import "unsafe"
+
+import (
+	"unsafe"
+)
 
 // very high level interface
 

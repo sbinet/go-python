@@ -22,12 +22,12 @@ package python
 
 */
 import "C"
+
 import (
 	"errors"
+	"fmt"
 	"unsafe"
 )
-
-import "fmt"
 
 ////// Operating System Utilities //////
 
