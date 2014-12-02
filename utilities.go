@@ -489,4 +489,15 @@ func PyEval_GetFuncDesc(fct *PyObject) string {
 	return C.GoString(c_name)
 }
 
+// PySys_SetArgv initializes the 'sys.argv' array in python.
+func PySys_SetArgv(argv []string) {
+	argc := C.int(len(argv))
+	cargs := make([]*C.char, len(argv))
+	for idx, arg := range argv {
+		cargs[idx] = C.CString(arg)
+		defer C.free(unsafe.Pointer(cargs[idx]))
+	}
+	C.PySys_SetArgv(argc, &cargs[0])
+}
+
 // EOF
