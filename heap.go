@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-func Py_InitModule(name string) (*PyObject, error) {
+func Py_InitModule(name string, methods ...PyMethodDef) (*PyObject, error) {
 	c_mname := C.CString(name)
 	defer C.free(unsafe.Pointer(c_mname))
 	obj := togo(C._gopy_InitModule(c_mname, nil))
