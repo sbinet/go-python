@@ -3,7 +3,7 @@ package python
 //#include "Python.h"
 //#include <stdlib.h>
 //#include <string.h>
-//int _gopy_PyRun_SimpleString(const char *command)
+//static int _gopy_PyRun_SimpleString(const char *command)
 //{return PyRun_SimpleString(command);}
 import "C"
 
