@@ -55,7 +55,7 @@ func PyRun_SimpleFile(filename string) error {
 	retcode := C.PyRun_SimpleFileExFlags(cfile, cfname, 0, nil)
 	if retcode != 0 {
 		return fmt.Errorf("error %d executing script %s", int(retcode),
-		                  filename)
+			filename)
 	}
 	return nil
 }
