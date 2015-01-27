@@ -524,7 +524,7 @@ func PyString_Format(format, args *PyObject) *PyObject {
 // Intern the argument *string in place. The argument must be the address of a pointer variable pointing to a Python string object. If there is an existing interned string that is the same as *string, it sets *string to it (decrementing the reference count of the old string object and incrementing the reference count of the interned string object), otherwise it leaves *string alone and interns it (incrementing its reference count). (Clarification: even though there is a lot of talk about reference counts, think of this function as reference-count-neutral; you own the object after the call if and only if you owned it before the call.)
 //
 // Note This function is not available in 3.x and does not have a PyBytes alias.
-func PyString_InternInPlance(self *PyObject) {
+func PyString_InternInPlace(self *PyObject) {
 	//FIXME check everything is OK...
 	s := topy(self)
 	C.PyString_InternInPlace(&s)
