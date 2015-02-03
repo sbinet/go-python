@@ -592,4 +592,8 @@ func PyCallIter_New(callable, sentinel *PyObject) *PyObject {
 	return togo(C.PyCallIter_New(topy(callable), topy(sentinel)))
 }
 
+func PyCode_NewEmpty(filename string, funcname string, firstlineno int) *PyObject {
+	return togo((*C.PyObject)(unsafe.Pointer(C.PyCode_NewEmpty(C.CString(filename), C.CString(funcname), C.int(firstlineno)))))
+}
+
 // EOF
