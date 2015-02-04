@@ -317,6 +317,7 @@ func (self *PyObject) CallObject(args *PyObject) *PyObject {
 // Return value: New reference.
 // Call a callable Python object callable, with a variable number of C arguments. The C arguments are described using a Py_BuildValue() style format string. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable, args) or callable(*args). Note that if you only pass PyObject * args, PyObject_CallFunctionObjArgs() is a faster alternative.
 func (self *PyObject) CallFunction(format string, args ...interface{}) *PyObject {
+
 	//FIXME
 	panic("not implemented")
 	return nil
