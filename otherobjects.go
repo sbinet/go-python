@@ -600,7 +600,7 @@ func PyCode_NewEmpty(filename string, funcname string, firstlineno int) *PyObjec
 	c_funcname := C.CString(funcname)
 	defer C.free(unsafe.Pointer(c_filename))
 	defer C.free(unsafe.Pointer(c_funcname))
-	return togo((*C.PyObject)(unsafe.Pointer(C.PyCode_NewEmpty(C.CString(filename), C.CString(funcname), C.int(firstlineno)))))
+	return togo((*C.PyObject)(unsafe.Pointer(C.PyCode_NewEmpty(c_filename, c_funcname, C.int(firstlineno)))))
 }
 
 // EOF
