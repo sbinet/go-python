@@ -596,6 +596,10 @@ func PyCallIter_New(callable, sentinel *PyObject) *PyObject {
 // Return value: New reference.
 // Return an empty CodePythonObject that corosponds to the file name, func name and line number in the source file it points to.
 func PyCode_NewEmpty(filename string, funcname string, firstlineno int) *PyObject {
+	c_filename := C.CString(filename)
+	c_funcname := C.CString(funcname)
+	defer C.free(unsafe.Pointer(c_filename))
+	defer C.free(unsafe.Pointer(c_funcname))
 	return togo((*C.PyObject)(unsafe.Pointer(C.PyCode_NewEmpty(C.CString(filename), C.CString(funcname), C.int(firstlineno)))))
 }
 
