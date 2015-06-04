@@ -16,7 +16,7 @@ static PyMethodDef* _gopy_malloc_PyMethodDefArray(size_t n) {
     return (PyMethodDef*)malloc(n * sizeof(PyMethodDef));
 }
 
-static _gopy_set_PyMethodDef(PyMethodDef *array, int i, PyMethodDef *o) {
+static void _gopy_set_PyMethodDef(PyMethodDef *array, int i, PyMethodDef *o) {
     array[i] = *o;
 }
 */
