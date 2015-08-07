@@ -97,9 +97,9 @@ func PyByteArray_AsBytes(self *PyObject) []byte {
 }
 
 // PyByteArray_AsBytesN returns the contents of bytearray as []bytes, size length
-func PyByteArray_AsBytesN(self *PyObject, length uint64) []byte {
-	blength := uint64(C._gopy_PyByteArray_GET_SIZE(topy(self)))
-	if blength < length {
+func PyByteArray_AsBytesN(self *PyObject, length int) []byte {
+	blength := int(C._gopy_PyByteArray_GET_SIZE(topy(self)))
+	if (blength < length) || (length < 0) {
 		panic("bytearray length out of range")
 	}
 	c_str := C.PyByteArray_AsString(topy(self))
