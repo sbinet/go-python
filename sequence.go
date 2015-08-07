@@ -89,6 +89,23 @@ func PyByteArray_AsString(self *PyObject) string {
 	return C.GoString(c_str)
 }
 
+// PyByteArray_AsBytes returns the contents of bytearray as []bytes
+func PyByteArray_AsBytes(self *PyObject) []byte {
+	length := C._gopy_PyByteArray_GET_SIZE(topy(self))
+	c_str := C.PyByteArray_AsString(topy(self))
+	return C.GoBytes(unsafe.Pointer(c_str),C.int(length))
+}
+
+// PyByteArray_AsBytesN returns the contents of bytearray as []bytes, size length
+func PyByteArray_AsBytesN(self *PyObject, length int) []byte {
+	blength := int(C._gopy_PyByteArray_GET_SIZE(topy(self)))
+	if (blength < length) || (length < 0) {
+		panic("bytearray length out of range")
+	}
+	c_str := C.PyByteArray_AsString(topy(self))
+	return C.GoBytes(unsafe.Pointer(c_str),C.int(length))
+}
+
 // int PyByteArray_Resize(PyObject *bytearray, Py_ssize_t len)
 // Resize the internal buffer of bytearray to len.
 func PyByteArray_Resize(self *PyObject, sz int) error {
