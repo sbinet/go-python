@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* go-python */
+#define _gopy_max_varargs 8 /* maximum number of varargs accepted by go-python */
+
 /* --- object --- */
 
 int
@@ -17,6 +20,12 @@ _gopy_PyObject_DelAttr(PyObject *o, PyObject *attr_name);
 
 int
 _gopy_PyObject_DelAttrString(PyObject *o, const char *attr_name);
+
+PyObject*
+_gopy_PyObject_CallFunction(PyObject *o, int len, char* types, void *args);
+
+PyObject*
+_gopy_PyObject_CallMethod(PyObject *o, char *method, int len, char* types, void *args);
 
 /* --- dict --- */
 

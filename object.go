@@ -6,6 +6,7 @@ import "C"
 import (
 	"fmt"
 	"os"
+	"strings"
 	"unsafe"
 )
 
@@ -301,18 +302,91 @@ func (self *PyObject) CallObject(args *PyObject) *PyObject {
 // Return value: New reference.
 // Call a callable Python object callable, with a variable number of C arguments. The C arguments are described using a Py_BuildValue() style format string. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable, args) or callable(*args). Note that if you only pass PyObject * args, PyObject_CallFunctionObjArgs() is a faster alternative.
 func (self *PyObject) CallFunction(format string, args ...interface{}) *PyObject {
-	//FIXME
-	panic("not implemented")
-	return nil
+	if len(args) > int(C._gopy_max_varargs) {
+		panic(fmt.Errorf(
+			"gopy: maximum number of varargs (%d) exceeded (%d)",
+			int(C._gopy_max_varargs),
+			len(args),
+		))
+	}
+
+	types := make([]string, 0, len(args))
+	cargs := make([]unsafe.Pointer, 0, len(args))
+
+	for _, arg := range args {
+		ptr, typ := pyfmt(arg)
+		types = append(types, typ)
+		cargs = append(cargs, ptr)
+		if typ == "s" {
+			defer func(ptr unsafe.Pointer) {
+				C.free(ptr)
+			}(ptr)
+		}
+	}
+
+	if len(args) <= 0 {
+		o := C._gopy_PyObject_CallFunction(self.ptr, 0, nil, nil)
+		return togo(o)
+	}
+
+	pyfmt := C.CString(strings.Join(types, ""))
+	defer C.free(unsafe.Pointer(pyfmt))
+	o := C._gopy_PyObject_CallFunction(
+		self.ptr,
+		C.int(len(args)),
+		pyfmt,
+		unsafe.Pointer(&cargs[0]),
+	)
+
+	return togo(o)
+
 }
 
 // PyObject* PyObject_CallMethod(PyObject *o, char *method, char *format, ...)
 // Return value: New reference.
 // Call the method named method of object o with a variable number of C arguments. The C arguments are described by a Py_BuildValue() format string that should produce a tuple. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression o.method(args). Note that if you only pass PyObject * args, PyObject_CallMethodObjArgs() is a faster alternative.
-func (self *PyObject) CallMethod(format string, args ...interface{}) *PyObject {
-	//FIXME
-	panic("not implemented")
-	return nil
+func (self *PyObject) CallMethod(method string, args ...interface{}) *PyObject {
+	if len(args) > int(C._gopy_max_varargs) {
+		panic(fmt.Errorf(
+			"gopy: maximum number of varargs (%d) exceeded (%d)",
+			int(C._gopy_max_varargs),
+			len(args),
+		))
+	}
+
+	cmethod := C.CString(method)
+	defer C.free(unsafe.Pointer(cmethod))
+
+	types := make([]string, 0, len(args))
+	cargs := make([]unsafe.Pointer, 0, len(args))
+
+	for _, arg := range args {
+		ptr, typ := pyfmt(arg)
+		types = append(types, typ)
+		cargs = append(cargs, ptr)
+		if typ == "s" {
+			defer func(ptr unsafe.Pointer) {
+				C.free(ptr)
+			}(ptr)
+		}
+	}
+
+	if len(args) <= 0 {
+		o := C._gopy_PyObject_CallMethod(self.ptr, cmethod, 0, nil, nil)
+		return togo(o)
+	}
+
+	pyfmt := C.CString(strings.Join(types, ""))
+	defer C.free(unsafe.Pointer(pyfmt))
+	o := C._gopy_PyObject_CallMethod(
+		self.ptr,
+		cmethod,
+		C.int(len(args)),
+		pyfmt,
+		unsafe.Pointer(&cargs[0]),
+	)
+
+	return togo(o)
 }
 
 /*
