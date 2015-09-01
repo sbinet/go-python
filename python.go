@@ -1,9 +1,7 @@
 // simplistic wrapper around the python C-API
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
+//#include "go-python.h"
 import "C"
 
 import (

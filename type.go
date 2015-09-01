@@ -1,10 +1,6 @@
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
-//int _gopy_PyType_Check(PyObject *o) { return PyType_Check(o); }
-//int _gopy_PyType_CheckExact(PyObject *o) { return PyType_CheckExact(o); }
+//#include "go-python.h"
 import "C"
 
 type PyTypeObject struct {

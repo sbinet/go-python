@@ -1,10 +1,6 @@
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
-//int _gopy_PyDict_Check(PyObject *o) { return PyDict_Check(o); }
-//int _gopy_PyDict_CheckExact(PyObject *o) { return PyDict_CheckExact(o); }
+//#include "go-python.h"
 import "C"
 
 import (

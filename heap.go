@@ -1,26 +1,8 @@
 package python
 
-/*
-#include <Python.h>
-#include <stdlib.h>
-
-static PyObject* _gopy_InitModule(const char* nm, PyMethodDef* methods) {
-	return Py_InitModule(nm, methods);
-}
-
-static PyObject* _gopy_InitModule3(const char* nm, PyMethodDef* methods, const char *doc) {
-	return Py_InitModule3(nm, methods, doc);
-}
-
-static PyMethodDef* _gopy_malloc_PyMethodDefArray(size_t n) {
-    return (PyMethodDef*)malloc(n * sizeof(PyMethodDef));
-}
-
-static void _gopy_set_PyMethodDef(PyMethodDef *array, int i, PyMethodDef *o) {
-    array[i] = *o;
-}
-*/
+// #include "go-python.h"
 import "C"
+
 import (
 	"errors"
 	"unsafe"

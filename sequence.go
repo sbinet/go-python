@@ -1,39 +1,6 @@
 package python
 
-/*
-#include "Python.h"
-#include <stdlib.h>
-#include <string.h>
-
-int _gopy_PyByteArray_Check(PyObject *o) { return PyByteArray_Check(o); }
-int _gopy_PyByteArray_CheckExact(PyObject *o) { return PyByteArray_CheckExact(o); }
-
-char* _gopy_PyByteArray_AS_STRING(PyObject *bytearray) { return PyByteArray_AS_STRING(bytearray); }
-
- Py_ssize_t _gopy_PyByteArray_GET_SIZE(PyObject *bytearray) { return PyByteArray_GET_SIZE(bytearray); }
-
-int _gopy_PyTuple_Check(PyObject *o) { return PyTuple_Check(o); }
-int _gopy_PyTuple_CheckExact(PyObject *o) { return PyTuple_CheckExact(o); }
-Py_ssize_t _gopy_PyTuple_GET_SIZE(PyObject *p) { return PyTuple_GET_SIZE(p); }
-void _gopy_PyTuple_SET_ITEM(PyObject *p, Py_ssize_t pos, PyObject *o) { PyTuple_SET_ITEM(p, pos, o); }
-PyObject* _gopy_PyTuple_GET_ITEM(PyObject *p, Py_ssize_t pos) { return PyTuple_GET_ITEM(p, pos); }
-
-int _gopy_PyList_Check(PyObject *o) { return PyList_Check(o); }
-int _gopy_PyList_CheckExact(PyObject *o) { return PyList_CheckExact(o); }
-Py_ssize_t _gopy_PyList_GET_SIZE(PyObject *o) { return PyList_GET_SIZE(o); }
-PyObject* _gopy_PyList_GET_ITEM(PyObject *list, Py_ssize_t i) { return PyList_GET_ITEM(list, i); }
-void _gopy_PyList_SET_ITEM(PyObject *list, Py_ssize_t i, PyObject *o) { PyList_SET_ITEM(list, i, o); }
-
-int _gopy_PyString_Check(PyObject *o) { return PyString_Check(o); }
-Py_ssize_t _gopy_PyString_GET_SIZE(PyObject *o) { return PyString_GET_SIZE(o);}
-char* _gopy_PyString_AS_STRING(PyObject *o) { return PyString_AS_STRING(o); }
-
-int _gopy_PyObject_CheckBuffer(PyObject *obj) { return PyObject_CheckBuffer(obj); }
-
- int _gopy_PyMemoryView_Check(PyObject *obj) { return PyMemoryView_Check(obj); }
- Py_buffer *_gopy_PyMemoryView_GET_BUFFER(PyObject *obj) { return PyMemoryView_GET_BUFFER(obj); }
-
-*/
+// #include "go-python.h"
 import "C"
 
 import (
@@ -93,7 +60,7 @@ func PyByteArray_AsString(self *PyObject) string {
 func PyByteArray_AsBytes(self *PyObject) []byte {
 	length := C._gopy_PyByteArray_GET_SIZE(topy(self))
 	c_str := C.PyByteArray_AsString(topy(self))
-	return C.GoBytes(unsafe.Pointer(c_str),C.int(length))
+	return C.GoBytes(unsafe.Pointer(c_str), C.int(length))
 }
 
 // PyByteArray_AsBytesN returns the contents of bytearray as []bytes, size length
@@ -103,7 +70,7 @@ func PyByteArray_AsBytesN(self *PyObject, length int) []byte {
 		panic("bytearray length out of range")
 	}
 	c_str := C.PyByteArray_AsString(topy(self))
-	return C.GoBytes(unsafe.Pointer(c_str),C.int(length))
+	return C.GoBytes(unsafe.Pointer(c_str), C.int(length))
 }
 
 // int PyByteArray_Resize(PyObject *bytearray, Py_ssize_t len)

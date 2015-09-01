@@ -1,23 +1,6 @@
 package python
 
-/*
-#include "Python.h"
-#include <stdlib.h>
-#include <string.h>
-
-// FIXME we should instead have a exceptions_windows.go file...
-# ifndef WIN32
-PyObject* PyErr_SetFromWindowsErr(int ierr) { return NULL; }
-PyObject* PyErr_SetExcFromWindowsErr(PyObject *type, int ierr) { return NULL; }
-PyObject* PyErr_SetFromWindowsErrWithFilename(int ierr, const char *filename) { return NULL; }
-PyObject* PyErr_SetExcFromWindowsErrWithFilename(PyObject *type, int ierr, char *filename) { return NULL; }
-
-# endif
-
-int _gopy_PyErr_WarnPy3k(char *message, int stacklevel)
-{ return PyErr_WarnPy3k(message, stacklevel);}
-
-*/
+// #include "go-python.h"
 import "C"
 
 import (

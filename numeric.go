@@ -1,21 +1,6 @@
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
-//int _gopy_PyInt_Check(PyObject *o) { return PyInt_Check(o); }
-//int _gopy_PyInt_CheckExact(PyObject *o) { return PyInt_CheckExact(o); }
-//long _gopy_PyInt_AS_LONG(PyObject *io) { return PyInt_AS_LONG(io); }
-//int _gopy_PyLong_Check(PyObject *o) { return PyLong_Check(o); }
-//int _gopy_PyLong_CheckExact(PyObject *o) { return PyLong_CheckExact(o); }
-//int _gopy_PyBool_Check(PyObject *o) { return PyBool_Check(o); }
-//PyObject *_gopy_pyfalse(void) { return Py_False; }
-//PyObject *_gopy_pytrue(void) { return Py_True; }
-//int _gopy_PyFloat_Check(PyObject *o) { return PyFloat_Check(o); }
-//int _gopy_PyFloat_CheckExact(PyObject *o) { return PyFloat_CheckExact(o); }
-//double _gopy_PyFloat_AS_DOUBLE(PyObject *pyfloat) { return PyFloat_AS_DOUBLE(pyfloat); }
-//int _gopy_PyComplex_Check(PyObject *o) { return PyComplex_Check(o); }
-//int _gopy_PyComplex_CheckExact(PyObject *o) { return PyComplex_CheckExact(o); }
+//#include "go-python.h"
 import "C"
 
 import (

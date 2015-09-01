@@ -1,10 +1,6 @@
 package python
 
-//#include "Python.h"
-//#include <stdlib.h>
-//#include <string.h>
-//static int _gopy_PyRun_SimpleString(const char *command)
-//{return PyRun_SimpleString(command);}
+//#include "go-python.h"
 import "C"
 
 import (

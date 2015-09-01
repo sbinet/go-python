@@ -1,26 +1,6 @@
 package python
 
-/*
-#include "Python.h"
-#include <stdlib.h>
-#include <string.h>
-
-#ifdef USE_STACKCHECK
- int _gopy_PyOS_CheckStack(void) { return PyOS_CheckStack(); }
-#else
- int _gopy_PyOS_CheckStack(void) { return 0; }
-#endif
-
- PyObject* _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, PyObject *fromlist) { return PyImport_ImportModuleEx(name, globals, locals, fromlist); }
-
- //void _gopy_PySys_WriteStdout(const char *data) {
- // PySys_WriteStdout("%s", data)
- //}
-
- #include "marshal.h"
- #include "frameobject.h"
-
-*/
+// #include "go-python.h"
 import "C"
 
 import (

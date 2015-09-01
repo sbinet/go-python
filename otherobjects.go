@@ -1,41 +1,6 @@
 package python
 
-/*
-#include "Python.h"
-#include <stdlib.h>
-#include <string.h>
-
-int _gopy_PyModule_Check(PyObject *p) { return PyModule_Check(p); }
-int _gopy_PyModule_CheckExact(PyObject *p) { return PyModule_CheckExact(p); }
-
- int _gopy_PyClass_Check(PyObject *o) { return PyClass_Check(o); }
-
- int _gopy_PyInstance_Check(PyObject *obj) { return PyInstance_Check(obj); }
-
- int _gopy_PyFunction_Check(PyObject *o) { return PyFunction_Check(o); }
-
- int _gopy_PyMethod_Check(PyObject *o) { return PyMethod_Check(o); }
-
- PyObject* _gopy_PyMethod_GET_CLASS(PyObject *meth) { return PyMethod_GET_CLASS(meth); }
-
- PyObject* _gopy_PyMethod_GET_FUNCTION(PyObject *meth) { return PyMethod_GET_FUNCTION(meth); }
-
- PyObject* _gopy_PyMethod_GET_SELF(PyObject *meth) { return PyMethod_GET_SELF(meth); }
-
-
- int _gopy_PySlice_Check(PyObject *ob) { return PySlice_Check(ob); }
-
- int _gopy_PyCapsule_CheckExact(PyObject *p) { return PyCapsule_CheckExact(p); }
-
-#include "frameobject.h"
- int _gopy_PyGen_Check(PyObject *ob) { return _gopy_PyGen_Check(ob); }
- int _gopy_PyGen_CheckExact(PyObject *ob) { return _gopy_PyGen_CheckExact(ob); }
-
-
- int _gopy_PySeqIter_Check(PyObject *op) { return PySeqIter_Check(op); }
- int _gopy_PyCallIter_Check(PyObject *op) { return PyCallIter_Check(op); }
-
-*/
+// #include "go-python.h"
 import "C"
 
 import (
