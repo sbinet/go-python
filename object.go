@@ -301,7 +301,7 @@ func (self *PyObject) CallObject(args *PyObject) *PyObject {
 // PyObject* PyObject_CallFunction(PyObject *callable, char *format, ...)
 // Return value: New reference.
 // Call a callable Python object callable, with a variable number of C arguments. The C arguments are described using a Py_BuildValue() style format string. The format may be NULL, indicating that no arguments are provided. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable, args) or callable(*args). Note that if you only pass PyObject * args, PyObject_CallFunctionObjArgs() is a faster alternative.
-func (self *PyObject) CallFunction(format string, args ...interface{}) *PyObject {
+func (self *PyObject) CallFunction(args ...interface{}) *PyObject {
 	if len(args) > int(C._gopy_max_varargs) {
 		panic(fmt.Errorf(
 			"gopy: maximum number of varargs (%d) exceeded (%d)",
@@ -390,14 +390,15 @@ func (self *PyObject) CallMethod(method string, args ...interface{}) *PyObject {
 }
 
 /*
- FIXME: varargs in cgo ?
-
 PyObject* PyObject_CallFunctionObjArgs(PyObject *callable, ..., NULL)
 Return value: New reference.
 Call a callable Python object callable, with a variable number of PyObject* arguments. The arguments are provided as a variable number of parameters followed by NULL. Returns the result of the call on success, or NULL on failure.
 
 New in version 2.2.
 */
+func (self *PyObject) CallFunctionObjArgs(format string, args ...interface{}) *PyObject {
+	return self.CallFunction(args...)
+}
 
 /*
 PyObject* PyObject_CallMethodObjArgs(PyObject *o, PyObject *name, ..., NULL)
@@ -406,6 +407,9 @@ Calls a method of the object o, where the name of the method is given as a Pytho
 
 New in version 2.2.
 */
+func (self *PyObject) CallMethodObjArgs(method string, args ...interface{}) *PyObject {
+	return self.CallMethod(method, args...)
+}
 
 // long PyObject_Hash(PyObject *o)
 // Compute and return the hash value of an object o. On failure, return -1. This is the equivalent of the Python expression hash(o).
