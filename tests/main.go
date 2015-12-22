@@ -34,4 +34,16 @@ func main() {
 	fmt.Printf("cPickle.dumps(%s) = %q\n", gostr,
 		python.PyString_AsString(out),
 	)
+	loads := pickle.GetAttrString("loads")
+	if loads == nil {
+		panic("could not retrieve 'cPickle.loads'")
+	}
+	out2 := loads.CallFunctionObjArgs("O", out)
+	if out2 == nil {
+		panic("could not load back out")
+	}
+	fmt.Printf("cPickle.loads(%q) = %q\n",
+		python.PyString_AsString(out),
+		python.PyString_AsString(out2),
+	)
 }
