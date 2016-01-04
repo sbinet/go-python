@@ -291,6 +291,13 @@ func (self *PyObject) Check_Callable() bool {
 	return int2bool(C.PyCallable_Check(self.ptr))
 }
 
+// PyObject* PyObject_Call(PyObject *callable_object, PyObject *args, PyObject *kw)
+// Return value: New reference.
+// Call a callable Python object callable_object, with arguments given by the tuple args, and named arguments given by the dictionary kw. If no named arguments are needed, kw may be NULL. args must not be NULL, use an empty tuple if no arguments are needed. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable_object, args, kw) or callable_object(*args, **kw).
+func (self *PyObject) Call(args, kw *PyObject) *PyObject {
+	return togo(C.PyObject_Call(self.ptr, args.ptr, kw.ptr))
+}
+
 // PyObject* PyObject_CallObject(PyObject *callable_object, PyObject *args)
 // Return value: New reference.
 // Call a callable Python object callable_object, with arguments given by the tuple args. If no arguments are needed, then args may be NULL. Returns the result of the call on success, or NULL on failure. This is the equivalent of the Python expression apply(callable_object, args) or callable_object(*args).
