@@ -142,6 +142,14 @@ func (self *PyObject) GetAttr(attr_name *PyObject) *PyObject {
 	return togo(C.PyObject_GetAttr(self.ptr, attr_name.ptr))
 }
 
+// PyObject* PyObject_Dir()
+// Return value: New reference.
+// This is equivalent to the Python expression dir(o), returning a (possibly empty) list of strings appropriate for the object argument, or NULL if there was an error. If the argument is NULL, this is like the Python dir(), returning the names of the current locals; in this case, if no execution frame is active then NULL is returned but PyErr_Occurred() will return false.
+func (self *PyObject) PyObject_Dir() *PyObject {
+	return togo(C.PyObject_Dir(self.ptr))
+
+}
+
 // PyObject* PyObject_GetAttrString(PyObject *o, const char *attr_name)
 // Return value: New reference.
 // Retrieve an attribute named attr_name from object o. Returns the attribute value on success, or NULL on failure. This is the equivalent of the Python expression o.attr_name.
