@@ -108,4 +108,10 @@ cPickle.loads("S'foo'\np1\n.") = "foo"
 	})
 }
 
-// EOF
+func TestErrFetch(t *testing.T) {
+	t.Parallel()
+	testPkg(t, pkg{
+		path: "tests/errfetch",
+		want: []byte("exc=&{<nil>}\nval=&{<nil>}\ntb=&{<nil>}\n"),
+	})
+}

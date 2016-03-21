@@ -61,6 +61,10 @@ func PyErr_Clear() {
 //
 // Note This function is normally only used by code that needs to handle exceptions or by code that needs to save and restore the error indicator temporarily.
 func PyErr_Fetch() (exc, val, tb *PyObject) {
+	exc = &PyObject{}
+	val = &PyObject{}
+	tb = &PyObject{}
+
 	C.PyErr_Fetch(&exc.ptr, &val.ptr, &tb.ptr)
 	return
 }
