@@ -47,6 +47,7 @@ func PyRun_SimpleFile(filename string) error {
 	if err != nil || cfile == nil {
 		return fmt.Errorf("python: could not open %s: %v", filename, err)
 	}
+	defer C.fclose(cfile)
 
 	retcode := C.PyRun_SimpleFileExFlags(cfile, cfname, 0, nil)
 	if retcode != 0 {
