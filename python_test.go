@@ -115,3 +115,18 @@ func TestErrFetch(t *testing.T) {
 		want: []byte("exc=&{<nil>}\nval=&{<nil>}\ntb=&{<nil>}\n"),
 	})
 }
+
+func TestModifyValues(t *testing.T) {
+	t.Parallel()
+	testPkg(t, pkg{
+		path: "tests/modify-values",
+		want: []byte(`values.__name__: "values"
+values.sval: "42"
+values.ival: 666
+sval='42'
+ival=666
+sval='42 is the answer'
+ival=1666
+`),
+	})
+}
