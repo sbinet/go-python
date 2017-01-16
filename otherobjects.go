@@ -526,6 +526,14 @@ func PySeqIter_Check(op *PyObject) bool {
 	return int2bool(C._gopy_PySeqIter_Check(topy(op)))
 }
 
+// PyObject* PyIter_Next(PyObject *o)
+// Return value: New reference.
+//
+// Return the next value from the iteration o.  The object must be an iterator (it is up to the caller to check this).  If there are no remaining values, returns NULL with no exception set.  If an error occurs while retrieving the item, returns NULL and passes along the exception.
+func PyIter_Next(op *PyObject) *PyObject {
+  return togo(C.PyIter_Next(topy(op)))
+}
+
 // PyObject* PySeqIter_New(PyObject *seq)
 // Return value: New reference.
 // Return an iterator that works with a general sequence object, seq. The iteration ends when the sequence raises IndexError for the subscripting operation.
