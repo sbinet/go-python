@@ -15,7 +15,7 @@ import (
 func file2py(f *os.File, mode string) *C.FILE {
 	cmode := C.CString(mode)
 	defer C.free(unsafe.Pointer(cmode))
-	name := C.CString(file.Name())
+	name := C.CString(f.Name())
 	defer C.free(unsafe.Pointer(name))
 	file := C.fopen(name, cmode)
 	return file

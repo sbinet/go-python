@@ -246,12 +246,6 @@ func PyErr_SetInterrupt() {
 	C.PyErr_SetInterrupt()
 }
 
-// int PySignal_SetWakeupFd(int fd)
-// This utility function specifies a file descriptor to which a '\0' byte will be written whenever a signal is received. It returns the previous such file descriptor. The value -1 disables the feature; this is the initial state. This is equivalent to signal.set_wakeup_fd() in Python, but without any error checking. fd should be a valid file descriptor. The function should only be called from the main thread.
-func PySignal_SetWakeupFd(fd int) int {
-	return int(C.PySignal_SetWakeupFd(C.int(fd)))
-}
-
 // PyObject* PyErr_NewException(char *name, PyObject *base, PyObject *dict)
 // Return value: New reference.
 // This utility function creates and returns a new exception object. The name argument must be the name of the new exception, a C string of the form module.class. The base and dict arguments are normally NULL. This creates a class object derived from Exception (accessible in C as PyExc_Exception).
