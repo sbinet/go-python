@@ -90,6 +90,12 @@ func file2go(f *C.FILE) *os.File {
 	return nil
 }
 
+// C.PyObject* PyObject_GetCPointer(PyObject *o)
+// Returns the internal C pointer to CPython object.
+func (self *PyObject) GetCPointer() *C.PyObject {
+	return self.ptr
+}
+
 // void Py_IncRef(PyObject *o)
 // Increment the reference count for object o. The object may be
 // NULL, in which case the function has no effect.
