@@ -4,7 +4,6 @@ package python
 import "C"
 
 import (
-	"errors"
 	"unsafe"
 )
 
@@ -160,9 +159,9 @@ func PyDict_Size(self *PyObject) int {
 //     Py_DECREF(o);
 // }
 // Changed in version 2.5: This function used an int * type for ppos. This might require changes in your code for properly supporting 64-bit systems.
-func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) error {
+func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) bool {
 	if pos == nil {
-		return errors.New("invalid position")
+		return false
 	}
 
 	c_pos := C.Py_ssize_t(*pos)
@@ -175,7 +174,7 @@ func PyDict_Next(self *PyObject, pos *int, key, value **PyObject) error {
 	*key = togo(c_key)
 	*value = togo(c_val)
 
-	return int2err(err)
+	return int2bool(err)
 }
 
 // int PyDict_Merge(PyObject *a, PyObject *b, int override)

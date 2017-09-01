@@ -83,7 +83,7 @@ func int2err(i C.int) error {
 		return nil
 	}
 	//FIXME: also handle python exceptions ?
-	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%i)", int(i))}
+	return &gopy_err{fmt.Sprintf("error in C-Python (rc=%d)", int(i))}
 }
 
 func file2go(f *C.FILE) *os.File {
