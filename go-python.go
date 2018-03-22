@@ -78,8 +78,5 @@ func pyfmt(v interface{}) (unsafe.Pointer, string) {
 
 	}
 
-	panic(fmt.Errorf(
-		"python: unknown type (%#T)",
-		v,
-	))
+	panic(fmt.Errorf("python: unknown type (%T)", v))
 }
