@@ -323,8 +323,9 @@ func PyList_Append(self, item *PyObject) error {
 //
 // Changed in version 2.5: This function used an int for low and high. This might require changes in your code for properly supporting 64-bit systems.
 func PyList_SetSlice(self *PyObject, low, high int, itemlist *PyObject) error {
-	err := C.PyList_SetSlice(topy(self), C.Py_ssize_t(low), C.Py_ssize_t(high),
-		topy(itemlist))
+	err := C.PyList_SetSlice(
+		topy(self), C.Py_ssize_t(low), C.Py_ssize_t(high), topy(itemlist),
+	)
 	return int2err(err)
 }
 

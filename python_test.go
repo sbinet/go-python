@@ -130,3 +130,13 @@ ival=1666
 `),
 	})
 }
+
+func TestIssue61(t *testing.T) {
+	t.Parallel()
+	testPkg(t, pkg{
+		path: "tests/issue61",
+		want: []byte(`['i want this gone']
+[]
+`),
+	})
+}

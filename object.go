@@ -20,6 +20,9 @@ func (self *PyObject) topy() *C.PyObject {
 }
 
 func topy(self *PyObject) *C.PyObject {
+	if self == nil {
+		return nil
+	}
 	return self.ptr
 }
 
