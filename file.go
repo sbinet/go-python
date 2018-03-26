@@ -17,12 +17,17 @@ import "C"
 
 import (
 	"os"
+	"unsafe"
 )
 
 // FromFile converts a Go file to Python file object.
 // Calling close from Python will not close a file descriptor.
 func FromFile(f *os.File, mode string) *PyObject {
-	p := C._gopy_PyFile_FromFile(C.int(f.Fd()), C.CString(f.Name()), C.CString(mode))
+	cname := C.CString(f.Name())
+	cmode := C.CString(mode)
+	p := C._gopy_PyFile_FromFile(C.int(f.Fd()), cname, cmode)
+	C.free(unsafe.Pointer(cname))
+	C.free(unsafe.Pointer(cmode))
 	return togo(p)
 }
 
