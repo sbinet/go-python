@@ -5,7 +5,6 @@ import "C"
 
 import (
 	"errors"
-	"fmt"
 	"unsafe"
 )
 
@@ -47,33 +46,6 @@ func PyOS_setsig(i int, h C.PyOS_sighandler_t) C.PyOS_sighandler_t {
 
 ///// system functions /////
 
-// PyObject *PySys_GetObject(char *name)
-// Return value: Borrowed reference.
-// Return the object name from the sys module or NULL if it does not exist, without setting an exception.
-func PySys_GetObject(name string) *PyObject {
-	c_name := C.CString(name)
-	defer C.free(unsafe.Pointer(c_name))
-
-	return togo(C.PySys_GetObject(c_name))
-}
-
-// FILE *PySys_GetFile(char *name, FILE *def)
-// Return the FILE* associated with the object name in the sys module, or def if name is not in the module or is not associated with a FILE*.
-func PySys_GetFile(name string, def *C.FILE) *C.FILE {
-	c_name := C.CString(name)
-	defer C.free(unsafe.Pointer(c_name))
-	//FIXME use go os.File ?
-	return C.PySys_GetFile(c_name, def)
-}
-
-// int PySys_SetObject(char *name, PyObject *v)
-// Set name in the sys module to v unless v is NULL, in which case name is deleted from the sys module. Returns 0 on success, -1 on error.
-func PySys_SetObject(name string, v *PyObject) error {
-	c_name := C.CString(name)
-	defer C.free(unsafe.Pointer(c_name))
-	return int2err(C.PySys_SetObject(c_name, topy(v)))
-}
-
 // void PySys_ResetWarnOptions()
 // Reset sys.warnoptions to an empty list.
 func PySys_ResetWarnOptions() {
@@ -94,32 +66,6 @@ func PySys_SetPath(path string) {
 	c_path := C.CString(path)
 	defer C.free(unsafe.Pointer(c_path))
 	C.PySys_SetPath(c_path)
-}
-
-// void PySys_WriteStdout(const char *format, ...)
-// Write the output string described by format to sys.stdout. No exceptions are raised, even if truncation occurs (see below).
-//
-// format should limit the total size of the formatted output string to 1000 bytes or less – after 1000 bytes, the output string is truncated. In particular, this means that no unrestricted “%s” formats should occur; these should be limited using “%.<N>s” where <N> is a decimal number calculated so that <N> plus the maximum size of other formatted text does not exceed 1000 bytes. Also watch out for “%f”, which can print hundreds of digits for very large numbers.
-//
-// If a problem occurs, or sys.stdout is unset, the formatted message is written to the real (C level) stdout.
-func PySys_WriteStdout(format string, args ...interface{}) {
-	//FIXME go-sprintf format and python-format may differ...
-	s := fmt.Sprintf(format, args...)
-	c_s := C.CString(s)
-	defer C.free(unsafe.Pointer(c_s))
-
-	//c_format := C.CString("%s")
-	//defer C.free(unsafe.Pointer(c_format))
-	//C._gopy_PySys_WriteStdout(c_s)
-
-	panic("not implemented")
-}
-
-// void PySys_WriteStderr(const char *format, ...)
-// As above, but write to sys.stderr or stderr instead.
-func PySys_WriteStderr(format string, args ...interface{}) {
-	//FIXME
-	panic("not implemented")
 }
 
 /////// Process Control /////////
