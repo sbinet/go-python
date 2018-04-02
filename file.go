@@ -1,47 +1,36 @@
 package python
 
-/*
-#include <stdio.h>
-#include "go-python.h"
+import "os"
 
-PyObject*
-_gopy_PyFile_FromFile(int fd, char *name, char *mode) {
-    FILE *f = fdopen(fd, mode);
-    PyObject *py = PyFile_FromFile(f, name, mode, NULL);
-    PyFile_SetBufSize(py, 0);
-    return py;
+func (py *Interpreter) fromFile(f *os.File, mode string) *Object {
+	p := py.r.FromFile(f, mode)
+	return newObject(p)
 }
 
-*/
-import "C"
-
-import (
-	"os"
-	"unsafe"
-)
-
-// FromFile converts a Go file to Python file object.
-// Calling close from Python will not close a file descriptor.
-func FromFile(f *os.File, mode string) *PyObject {
-	cname := C.CString(f.Name())
-	cmode := C.CString(mode)
-	p := C._gopy_PyFile_FromFile(C.int(f.Fd()), cname, cmode)
-	C.free(unsafe.Pointer(cname))
-	C.free(unsafe.Pointer(cmode))
-	return togo(p)
+// FromFile converts Go file into python file object.
+func (py *Interpreter) FromFile(f *os.File, mode string) *Object {
+	obj := py.fromFile(f, mode)
+	obj.setFinalizer()
+	return obj
 }
 
-// SetStdin sets a sys.stdin to a specified file descriptor.
-func SetStdin(f *os.File) error {
-	return PySys_SetObject("stdin", FromFile(f, "r"))
+// SetStdinFile sets a sys.stdin to a specified file descriptor.
+func (py *Interpreter) SetStdinFile(f *os.File) error {
+	pf := py.fromFile(f, "r")
+	defer pf.decRef()
+	return py.SetStdinObject(pf)
 }
 
-// SetStdout sets a sys.stdout to a specified file descriptor.
-func SetStdout(f *os.File) error {
-	return PySys_SetObject("stdout", FromFile(f, "w"))
+// SetStdoutFile sets a sys.stdout to a specified file descriptor.
+func (py *Interpreter) SetStdoutFile(f *os.File) error {
+	pf := py.fromFile(f, "w")
+	defer pf.decRef()
+	return py.SetStdoutObject(pf)
 }
 
-// SetStderr sets a sys.stderr to a specified file descriptor.
-func SetStderr(f *os.File) error {
-	return PySys_SetObject("stderr", FromFile(f, "w"))
+// SetStderrFile sets a sys.stderr to a specified file descriptor.
+func (py *Interpreter) SetStderrFile(f *os.File) error {
+	pf := py.fromFile(f, "w")
+	defer pf.decRef()
+	return py.SetStderrObject(pf)
 }

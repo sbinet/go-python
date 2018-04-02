@@ -450,10 +450,3 @@ _gopy_PyImport_ImportModuleEx(char *name, PyObject *globals, PyObject *locals, P
 //void _gopy_PySys_WriteStdout(const char *data) {
 // PySys_WriteStdout("%s", data)
 //}
-
-/* --- veryhigh --- */
-
-int
-_gopy_PyRun_SimpleString(const char *command) {
-	return PyRun_SimpleString(command);
-}

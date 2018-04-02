@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-.PHONY: all install test
+.PHONY: all install test build
 
 # default to gc, but allow caller to override on command line
 GO_COMPILER:=$(GC)
@@ -26,3 +26,12 @@ install:
 
 test: install
 	$(test_cwd)
+
+build-py2: install
+	go build -buildmode=plugin ./python2/plugin/python2.go
+
+build-py3: install
+	go build -buildmode=plugin ./python3/plugin/python3.go
+
+build: build-py2 build-py3
+	go build ./cmd/go-python
