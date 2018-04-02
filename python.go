@@ -2,8 +2,11 @@ package python
 
 import (
 	"fmt"
+	"github.com/sbinet/go-python/runtime"
 	"sync"
 )
+
+type Runtime = runtime.Runtime
 
 func NewInterpreter(r Runtime) *Interpreter {
 	return &Interpreter{r: r}
@@ -15,10 +18,10 @@ type Interpreter struct {
 }
 
 // Initialize initializes the python interpreter and its GIL.
-func (py *Interpreter) Initialize() error {
+func (py *Interpreter) Initialize(signals bool) error {
 	// make sure the python interpreter has been initialized
 	if !py.r.IsInitialized() {
-		py.r.Initialize()
+		py.r.Initialize(signals)
 	}
 	if !py.r.IsInitialized() {
 		return fmt.Errorf("python: could not initialize the python interpreter")

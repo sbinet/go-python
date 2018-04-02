@@ -32,7 +32,7 @@ func main() {
 	}
 	r := loadRuntime(vers)
 	py := python.NewInterpreter(r)
-	err := py.Initialize()
+	err := py.Initialize(true)
 	if err != nil {
 		panic(err)
 	}

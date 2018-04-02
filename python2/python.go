@@ -5,7 +5,7 @@ package python2
 import "C"
 
 import (
-	"github.com/sbinet/go-python"
+	python "github.com/sbinet/go-python/runtime"
 	"os"
 	"unsafe"
 )
@@ -14,20 +14,24 @@ var Runtime python.Runtime = py2Runtime{}
 
 type py2Runtime struct{}
 
-func (py2Runtime) Initialize() {
-	C.Py_Initialize()
+func (py2Runtime) GetVersion() string {
+	return C.GoString(C.Py_GetVersion())
+}
+
+func (py2Runtime) GetCompiler() string {
+	return C.GoString(C.Py_GetCompiler())
+}
+
+func (py2Runtime) Initialize(signals bool) {
+	sig := 0
+	if signals {
+		sig = 1
+	}
+	C.Py_InitializeEx(C.int(sig))
 }
 
 func (py2Runtime) IsInitialized() bool {
 	return C.Py_IsInitialized() != 0
-}
-
-func (py2Runtime) EvalThreadsInitialized() bool {
-	return C.PyEval_ThreadsInitialized() != 0
-}
-
-func (py2Runtime) EvalInitThreads() {
-	C.PyEval_InitThreads()
 }
 
 func (py2Runtime) Finalize() {

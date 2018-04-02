@@ -4,57 +4,64 @@ package python2
 #include "go-python.h"
 
 void _gopy2_decref(PyObject *ptr) { Py_DECREF(ptr); }
+int _gopy2_PyString_Check(PyObject *ptr) { PyString_Check(ptr); }
+int _gopy2_PyString_CheckExact(PyObject *ptr) { PyString_CheckExact(ptr); }
 */
 import "C"
 
 import (
-	"github.com/sbinet/go-python"
-	"unsafe"
+	"github.com/sbinet/go-python/runtime"
 )
 
-type Object struct {
-	ptr *C.PyObject
-}
+type Object C.PyObject
 
 func (o *Object) Valid() bool {
-	return o != nil && o.ptr != nil
+	return o != nil
+}
+func (o *Object) IsNone() bool {
+	return o.toPy() == C.Py_None
 }
 func (o *Object) DecRef() {
 	if !o.Valid() {
 		return
 	}
-	C._gopy2_decref(o.ptr)
-	o.ptr = nil
+	C._gopy2_decref(o.toPy())
 }
 
 func (o *Object) toPy() *C.PyObject {
-	if o == nil {
-		return nil
-	}
-	return o.ptr
+	return (*C.PyObject)(o)
 }
 
 func toGo(obj *C.PyObject) *Object {
-	if obj == nil {
-		return nil
-	}
-	return &Object{ptr: obj}
+	return (*Object)(obj)
 }
 
-func fromPtr(obj python.ObjectPtr) *Object {
+func fromPtr(obj runtime.Object) *Object {
 	if obj == nil {
 		return nil
 	}
 	return obj.(*Object)
 }
 
-func toPtr(obj *Object) python.ObjectPtr {
+func toPtr(obj *Object) runtime.Object {
 	if obj == nil {
 		return nil
 	}
 	return obj
 }
 
-func objectFromPtr(ptr unsafe.Pointer) *Object {
-	return toGo((*C.PyObject)(ptr))
+func (obj *Object) HasAttr(name runtime.Object) bool {
+	return C.PyObject_HasAttr(obj.toPy(), fromPtr(name).toPy()) != 0
+}
+
+func (obj *Object) AsString() string {
+	return C.GoString(C.PyString_AsString(obj.toPy()))
+}
+
+func (obj *Object) StringCheck() bool {
+	return C._gopy2_PyString_Check(obj.toPy()) != 0
+}
+
+func (obj *Object) StringCheckExact() bool {
+	return C._gopy2_PyString_CheckExact(obj.toPy()) != 0
 }

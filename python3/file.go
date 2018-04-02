@@ -4,7 +4,7 @@ package python3
 import "C"
 
 import (
-	"github.com/sbinet/go-python"
+	"github.com/sbinet/go-python/runtime"
 	"os"
 	"unsafe"
 )
@@ -23,7 +23,7 @@ func (py3Runtime) fromFile(f *os.File, mode string) *Object {
 	return toGo(p)
 }
 
-func (py py3Runtime) FromFile(f *os.File, mode string) python.ObjectPtr {
+func (py py3Runtime) FromFile(f *os.File, mode string) runtime.Object {
 	p := py.fromFile(f, mode)
 	return toPtr(p)
 }

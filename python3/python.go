@@ -5,7 +5,7 @@ package python3
 import "C"
 
 import (
-	"github.com/sbinet/go-python"
+	python "github.com/sbinet/go-python/runtime"
 	"os"
 	"unsafe"
 )
@@ -14,20 +14,24 @@ var Runtime python.Runtime = py3Runtime{}
 
 type py3Runtime struct{}
 
-func (py3Runtime) Initialize() {
-	C.Py_Initialize()
+func (py3Runtime) GetVersion() string {
+	return C.GoString(C.Py_GetVersion())
+}
+
+func (py3Runtime) GetCompiler() string {
+	return C.GoString(C.Py_GetCompiler())
+}
+
+func (py3Runtime) Initialize(signals bool) {
+	sig := 0
+	if signals {
+		sig = 1
+	}
+	C.Py_InitializeEx(C.int(sig))
 }
 
 func (py3Runtime) IsInitialized() bool {
 	return C.Py_IsInitialized() != 0
-}
-
-func (py3Runtime) EvalInitThreads() {
-	C.PyEval_InitThreads()
-}
-
-func (py3Runtime) EvalThreadsInitialized() bool {
-	return C.PyEval_ThreadsInitialized() != 0
 }
 
 func (py3Runtime) Finalize() {
