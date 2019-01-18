@@ -1,0 +1,29 @@
+build: off
+
+clone_folder: c:\gopath\src\github.com\sbinet\go-python
+
+cache:
+  - '%LocalAppData%\\go-build'
+  - '%LocalAppData%\\pip'
+
+branches:
+  only:
+    - master
+
+environment:
+  GOPATH: c:\gopath
+  GOPY_APPVEYOR_CI: '1'
+  GODEBUG: 'cgocheck=0'
+  GOTRACEBACK: 'crash'
+  PYTHONUNBUFFERED: "1"
+  CPYTHON2DIR: "C:\\Python27-x64"
+  PATH: '%GOPATH%\bin;%CPYTHON2DIR%;%CPYTHON2DIR%\\Scripts;C:\msys64\mingw64\bin;C:\msys64\usr\bin\;%PATH%'
+
+stack: go 1.11
+
+build_script:
+  - "%CPYTHON2DIR%\\python --version"
+  - go get -v -t ./...
+
+test_script:
+  - go test ./...

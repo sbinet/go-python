@@ -2,6 +2,7 @@ go-python
 =========
 
 [![Build Status](https://drone.io/github.com/sbinet/go-python/status.png)](https://drone.io/github.com/sbinet/go-python/latest)
+[![Build status](https://ci.appveyor.com/api/projects/status/n0ujg8no487a89vo/branch/master?svg=true)](https://ci.appveyor.com/project/sbinet/go-python/branch/master)
 
 Naive `go` bindings towards the C-API of CPython-2.
 
