@@ -1,8 +1,8 @@
 package python
 
 /*
-#include <stdio.h>
 #include "go-python.h"
+#include <stdio.h>
 
 PyObject*
 _gopy_PyFile_FromFile(int fd, char *name, char *mode) {
