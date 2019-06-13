@@ -15,6 +15,13 @@ type PyObject struct {
 	ptr *C.PyObject
 }
 
+// String returns a string representation of the PyObject
+func (self *PyObject) String() string {
+	o := self.Str()
+	defer o.DecRef()
+	return PyString_AsString(o)
+}
+
 func (self *PyObject) topy() *C.PyObject {
 	return self.ptr
 }
