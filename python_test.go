@@ -140,3 +140,12 @@ func TestIssue61(t *testing.T) {
 `),
 	})
 }
+
+func TestCheckNone(t *testing.T) {
+	t.Parallel()
+	testPkg(t, pkg{
+		path: "tests/none-check",
+		want: []byte(`type=<type 'NoneType'>, str=None, eq_none=true
+`),
+	})
+}
