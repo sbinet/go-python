@@ -112,7 +112,7 @@ func TestErrFetch(t *testing.T) {
 	t.Parallel()
 	testPkg(t, pkg{
 		path: "tests/errfetch",
-		want: []byte("exc=&{<nil>}\nval=&{<nil>}\ntb=&{<nil>}\n"),
+		want: []byte("exc=<NULL>\nval=<NULL>\ntb=<NULL>\n"),
 	})
 }
 
