@@ -332,13 +332,13 @@ func PyBool_Check(self *PyObject) bool {
 // The Python False object. This object has no methods.
 // It needs to be treated just like any other object with respect to
 // reference counts.
-var Py_False = togo(C._gopy_pyfalse())
+var Py_False = &PyObject{ptr: C._gopy_pyfalse()}
 
 // PyObject* Py_True
 // The Python True object. This object has no methods.
 // It needs to be treated just like any other object with respect to
 // reference counts.
-var Py_True = togo(C._gopy_pytrue())
+var Py_True = &PyObject{ptr: C._gopy_pytrue()}
 
 /*
 Py_RETURN_FALSE

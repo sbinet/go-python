@@ -27,10 +27,18 @@ func topy(self *PyObject) *C.PyObject {
 }
 
 func togo(obj *C.PyObject) *PyObject {
-	if obj == nil {
+	switch obj {
+	case nil:
 		return nil
+	case Py_None.ptr:
+		return Py_None
+	case Py_True.ptr:
+		return Py_True
+	case Py_False.ptr:
+		return Py_False
+	default:
+		return &PyObject{ptr: obj}
 	}
-	return &PyObject{ptr: obj}
 }
 
 // PyObject_FromVoidPtr converts a PyObject from an unsafe.Pointer
