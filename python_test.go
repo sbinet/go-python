@@ -11,9 +11,10 @@ import (
 )
 
 func TestGoPython(t *testing.T) {
-	cmd := exec.Command("go-python", "-c", "print 1+1")
-	err := cmd.Run()
-	assert.NilError(t, err, "go-python failed")
+	cmd := exec.Command("go", "run", "main.go", "-c", "print 1+1")
+	cmd.Dir = "./cmd/go-python/"
+	output, err := cmd.CombinedOutput()
+	assert.NilError(t, err, string(output))
 }
 
 func TestCases(t *testing.T) {
