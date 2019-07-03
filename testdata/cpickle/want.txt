@@ -1,0 +1,3 @@
+hello [ foo ]
+cPickle.dumps(foo) = "S'foo'\np1\n."
+cPickle.loads("S'foo'\np1\n.") = "foo"
