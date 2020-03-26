@@ -19,7 +19,7 @@ environment:
   CPYTHON2DIR: "C:\\Python27-x64"
   PATH: '%GOPATH%\bin;%CPYTHON2DIR%;%CPYTHON2DIR%\\Scripts;C:\msys64\mingw64\bin;C:\msys64\usr\bin\;%PATH%'
 
-stack: go 1.11
+stack: go 1.13
 
 build_script:
   - "%CPYTHON2DIR%\\python --version"
