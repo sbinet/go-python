@@ -16,10 +16,12 @@ func Py_BuildValue(format string, args ...interface{}) *PyObject {
 // ml_doc	char *	points to the contents of the docstring
 type PyMethodDef struct {
 	Name  string // name of the method
-	Meth  func(self, args *PyObject) *PyObject
+	Meth  PyCFunction
 	Flags MethodDefFlags
 	Doc   string
 }
+
+type PyCFunction C.PyCFunction
 
 type MethodDefFlags int
 
