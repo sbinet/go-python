@@ -3,6 +3,7 @@ go-python
 
 [![Build Status](https://travis-ci.org/sbinet/go-python.svg?branch=master)](https://travis-ci.org/sbinet/go-python)
 [![Build status](https://ci.appveyor.com/api/projects/status/n0ujg8no487a89vo/branch/master?svg=true)](https://ci.appveyor.com/project/sbinet/go-python/branch/master)
+[![GoDocs](https://godocs.io/github.com/sbinet/go-python?status.svg)](https://godocs.io/github.com/sbinet/go-python)
 
 Naive `go` bindings towards the C-API of CPython-2.
 
@@ -48,9 +49,9 @@ If ``go get`` + ``pkg-config`` failed:
 Documentation
 -------------
 
-Is available on ``godoc``:
+Is available on ``godocs``:
 
- http://godoc.org/github.com/sbinet/go-python
+ https://godocs.io/github.com/sbinet/go-python
 
 
 Example:
