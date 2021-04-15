@@ -1,10 +1,18 @@
 #ifndef GOPYTHON_GOPYTHON_H
 #define GOPYTHON_GOPYTHON_H 1
 
+#ifdef __APPLE__
+#include "Python/Python.h"
+
+#include "Python/frameobject.h"
+#include "Python/marshal.h"
+#else
 #include "Python.h"
 
 #include "frameobject.h"
 #include "marshal.h"
+#endif
+
 
 /* stdlib */
 #include <stdlib.h>
