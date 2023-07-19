@@ -49,11 +49,11 @@ func testPkg(t *testing.T, table pkg) {
 			"[%s]: error running go-python test: %v\n%v\n",
 			table.path,
 			err,
-			string(buf.Bytes()),
+			buf.String(),
 		)
 	}
 
-	if !reflect.DeepEqual(string(buf.Bytes()), string(table.want)) {
+	if !reflect.DeepEqual(buf.String(), string(table.want)) {
 		diffTxt := ""
 		diffBin, diffErr := exec.LookPath("diff")
 		if diffErr == nil {
@@ -79,7 +79,7 @@ func testPkg(t *testing.T, table pkg) {
 
 		t.Fatalf("[%s]: error running go-python test:\nwant:\n%s\n\ngot:\n%s\n%s",
 			table.path,
-			string(table.want), string(buf.Bytes()),
+			string(table.want), buf.String(),
 			diffTxt,
 		)
 	}
