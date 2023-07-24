@@ -1,6 +1,9 @@
 go-python
 =========
 
+**`sbinet/go-python` only supports CPython2. CPython2 isn't supported anymore by [python.org](https://python.org). Thus, `sbinet/go-python` is now archived.**
+**A possible alternative may be to use and contribute to [go-python/cpy3](https://github.com/go-python/cpy3) instead.**
+
 [![Build Status](https://travis-ci.org/sbinet/go-python.svg?branch=master)](https://travis-ci.org/sbinet/go-python)
 [![Build status](https://ci.appveyor.com/api/projects/status/n0ujg8no487a89vo/branch/master?svg=true)](https://ci.appveyor.com/project/sbinet/go-python/branch/master)
 [![GoDocs](https://godocs.io/github.com/sbinet/go-python?status.svg)](https://godocs.io/github.com/sbinet/go-python)
